@@ -8,7 +8,6 @@
     
 </head>
 <body>
-<h1>abbf</h1>
 <!-- 지도를 표시할 div 입니다 -->
 <div id="map" style="width:100%;height:350px;"></div>
 
