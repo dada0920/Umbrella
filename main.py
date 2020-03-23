@@ -5,7 +5,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl
 import re
 import datetime
-from ui.main_ui import Ui_MainWindow
+from UI.main_ui import Ui_MainWindow
 import pytube
 from threading import Thread
 from PyQt5.QtCore import *
