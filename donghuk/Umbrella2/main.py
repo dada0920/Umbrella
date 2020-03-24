@@ -11,25 +11,73 @@ from threading import Thread
 from PyQt5.QtCore import *
 import subprocess
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
+import json
+import os
+import requests
+
+from PyQt5.QtPositioning import *
+
+
+#웹 엔진에서 파이썬으로 신호주기
+
+#https://www.riverbankcomputing.com/static/Docs/PyQt5/api/qtwebenginewidgets/qwebenginepage.html#Feature
 
 class TestForm(QMainWindow, Ui_MainWindow) :
     #생성자
     def __init__(self) :
         super().__init__()
         self.setupUi(self)  # 초기화
-        self.url = "http://localhost:8080/umbrella"
+        self.url = QUrl("http://localhost:8080/umbrella")
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
-        self.page.setUrl(QUrl(self.url))
+        self.page.setUrl(self.url)
         self.page.setView(self.webEngineView)
+
+
 
         self.comboBox.addItem("키워드")
         self.comboBox.addItem("주소")
+
+        # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
 
 
         self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)
+        self.init_my_location()
+        self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
+        # self.setMap(self.my_location_lat, self.my_location_lng)
+
+
+    #아이피로 현재 위치 받아오기(google api 사용)
+    def init_my_location(self) :
+        url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQKxbTt0MrFNH85kTJXzickMD5s88UVaI'
+        data = {
+            'considerIp': True,
+        }
+
+        result = requests.post(url, data)
+
+        my_location = json.loads(result.text)
+        # print(my_location)
+        # print("lat : ",my_location.get('location').get('lat'))
+        # print("lon : ",my_location.get('location').get('lng'))
+        self.my_location_lat = my_location.get('location').get('lat')
+        self.my_location_lng = my_location.get('location').get('lng')
+
+
+    def setMap(self,lat, lng) :
+        script = """
+        var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+        map.setCenter(umbrella_location);
+        """
+        self.run(script)
+
+    #위치권한 요청이 왔을때 허용해줌
+    def setPagePermission(self, url, feature) :
+        self.page.setFeaturePermission(url, feature, QWebEnginePage.PermissionGrantedByUser)
+
+
     def search(self) :
 
 
@@ -64,30 +112,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
                 }
             }
 
-            // 지도에 마커를 표시하는 함수입니다
-            function displayMarker(place) {
 
-                // 마커를 생성하고 지도에 표시합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: new kakao.maps.LatLng(place.y, place.x)
-                });
-
-
-
-                //*** 마커 담기
-                markerList.push(marker)
-
-
-
-
-                // 마커에 클릭이벤트를 등록합니다
-                kakao.maps.event.addListener(marker, 'click', function() {
-                    // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-                    infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-                    infowindow.open(map, marker);
-                });
-            }
             """
         elif self.comboBox.currentIndex():
             script = """
@@ -131,6 +156,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
             return
+
+
         self.run(script)
 
 

@@ -13,18 +13,43 @@
 <div id="mapWrapper">
 
 <!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:100%;height:350px;"></div>
+<div id="map" style="width:100%;height:480px;"></div>
 
 </div>
 <!-- 로드뷰 -->
-<div id="roadview" style="width:100%;height:350px;"></div>
+<!-- <div id="roadview" style="width:100%;height:350px;"></div>
 
+
+</div> -->
+<div id="result">
 
 </div>
+<div id="tmp_div"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=034b088099b3f73d6f7a1df2f8d71f9a&libraries=services,clusterer,drawing"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=034b088099b3f73d6f7a1df2f8d71f9a"></script>
 <script>
 
-/* var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+
+// marker생성시 markerList에 담기. (마커 모두 삭제시 필요)
+var markerList = new Array();
+
+var infowindow = new kakao.maps.InfoWindow({
+    content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+});
+
+
+
+function removeMarkers(){	//마커 전부 삭제하는 메소드
+	for(var i=0; i < markerList.length; i++){
+		markerList[i].setMap(null);
+	}
+}; 
+
+
+
+
+
+ var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 mapOption = { 
     center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
     level: 3 // 지도의 확대 레벨
@@ -49,28 +74,93 @@ iwPosition = new kakao.maps.LatLng(33.450701, 126.570667), //인포윈도우 표
 iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
 //인포윈도우를 생성하고 지도에 표시합니다
-var infowindow = new kakao.maps.InfoWindow({
+/* var infowindow = new kakao.maps.InfoWindow({
 map: map, // 인포윈도우가 표시될 지도
 position : iwPosition, 
 content : iwContent,
 removable : iwRemoveable
-});
-
-
-var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
-var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
-var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-
-var position = new kakao.maps.LatLng(33.450701, 126.570667);
-
-// 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
-roadviewClient.getNearestPanoId(position, 50, function(panoId) {
-    roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
 }); */
 
 
 
 
+//지도에 마커를 표시하는 함수입니다
+function displayMarker(place) {
+
+    // 마커를 생성하고 지도에 표시합니다
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(place.y, place.x)
+    });
+
+
+
+    //*** 마커 담기
+    markerList.push(marker)
+
+
+
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, 'click', function() {
+        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+        infowindow.open(map, marker);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//지도 중심 좌표
+var center_latlng = map.getCenter();
+var current_level = map.getLevel();
+
+
+
+
+
+
+//지도가 이동, 확대, 축소로 인해 중심좌표가 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+kakao.maps.event.addListener(map, 'center_changed', function() {
+
+    // 지도의  레벨을 얻어옵니다
+    current_level = map.getLevel();
+
+    // 지도의 중심좌표를 얻어옵니다 
+    center_latlng = map.getCenter(); 
+
+    var message = '<p>지도 레벨은 ' + current_level + ' 이고</p>';
+    message += '<p>중심 좌표는 위도 ' + center_latlng.getLat() + ', 경도 ' + center_latlng.getLng() + '입니다</p>';
+
+    var resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = message;
+
+});
+
+
+
+
+
+
+// 거리계산 활용? polyline.getlength?
+const polyline = new window.daum.maps.Polyline({
+	map : map,
+	path : [
+		new window.daum.maps.LatLng(center_latlng.getLat(), center_latlng.getLng()),
+		new window.daum.maps.LatLng(center_latlng.getLat(), center_latlng.getLng())
+	],
+	strokeWeight : 0
+});
 
 
 
@@ -90,8 +180,7 @@ roadviewClient.getNearestPanoId(position, 50, function(panoId) {
 
 
 
-
-var overlayOn = true, // 지도 위에 로드뷰 오버레이가 추가된 상태를 가지고 있을 변수
+/*var overlayOn = true , // 지도 위에 로드뷰 오버레이가 추가된 상태를 가지고 있을 변수
 container = document.getElementById('container'), // 지도와 로드뷰를 감싸고 있는 div 입니다
 mapWrapper = document.getElementById('mapWrapper'), // 지도를 감싸고 있는 div 입니다
 mapContainer = document.getElementById('map'), // 지도를 표시할 div 입니다 
@@ -340,7 +429,7 @@ if (control.className.indexOf('active') === -1) {
 function closeRoadview() {
 var position = marker.getPosition();
 toggleMapWrapper(true, position);
-}
+} */
 </script>
 </body>
 </html>
