@@ -79,7 +79,7 @@ function displayMarker(place) {
         """
 
         self.run(script_tmp_1)
-    def run(self, script) :     
+    def run(self, script) :
         self.page.runJavaScript(script)
 
 if __name__ == "__main__" :
