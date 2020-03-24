@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
         self.groupBox_2.setTitle(_translate("MainWindow", "GroupBox"))
-        self.pushButton.setText(_translate("MainWindow", "PushButton"))
+        self.pushButton.setText(_translate("MainWindow", "검색"))
         self.groupBox_3.setTitle(_translate("MainWindow", "GroupBox"))
 
 from PyQt5 import QtWebEngineWidgets
