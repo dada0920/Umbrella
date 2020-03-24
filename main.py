@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl, webEngineView
 import re
 import datetime
 from UI.main_ui import Ui_MainWindow
@@ -10,6 +10,7 @@ import pytube
 from threading import Thread
 from PyQt5.QtCore import *
 import subprocess
+
 
 class TestForm(QMainWindow, Ui_MainWindow) :
     #생성자

@@ -74,7 +74,7 @@ geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function
         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
         map.setCenter(coords);
     }
-});    
+});
 </script>
 </body>
 </html>

@@ -7,4 +7,3 @@ gmaps.geocode('대한민국 서울특별시 강남구 대치2동 514', language=
 
 
 ff = folium.Map(location = [45.5236, -122.6750])
-ff

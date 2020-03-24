@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from PyQt4 import QtCore, QtGui, QtWebKit, QtNetwork
+from PyQt5 import QtCore, QtGui, QtWebKit, QtNetwork
 import functools
 
 class MainWindow(QtGui.QWidget):
