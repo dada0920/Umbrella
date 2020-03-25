@@ -160,9 +160,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
                         map: map,
                         position: coords
                     });
-
-
-
                     //*** 마커 담기
                     markerList.push(marker)
 
@@ -198,8 +195,10 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     #단위는 m
     def getDistance(self, center, pointList) :
 
-        # center 기본값은 '내위치' 좌표
+        # center가 None일 경우
+        # 기본값으로 '내위치'의 좌표
         center = center or [self.my_location_lat, self.my_location_lng]
+
         script = """
         var tmp_point_arr = """+str(pointList)+"""
         var tmp_center = """+str(center)+"""
@@ -225,6 +224,22 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
         return result
 
+
+
+        #마커 다 지우는 메소드
+        def removeMarkers(self) :
+            script = """
+            removeMarkers();
+            """
+            self.run(script)
+
+
+        #지도 확대 레벨 설정
+        def map_setLevel(self, level) :
+            script = """
+            map.setLevel("""+str(level)+""")
+            """
+            self.run(script)
 
 
 if __name__ == "__main__" :
