@@ -25,9 +25,22 @@
 
 </div>
 <div id="tmp_div"></div>
+<div id="dataPool">
+	<div id="map_center">
+		<input type="hidden" id="centerX" />
+		<input type="hidden" id="centerY" />
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=034b088099b3f73d6f7a1df2f8d71f9a&libraries=services,clusterer,drawing"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=034b088099b3f73d6f7a1df2f8d71f9a"></script>
 <script>
+
+var centerX = $('#centerX');
+var centerY = $('#centerY');
+
 
 
 // marker생성시 markerList에 담기. (마커 모두 삭제시 필요)
@@ -144,23 +157,27 @@ kakao.maps.event.addListener(map, 'center_changed', function() {
 
     var resultDiv = document.getElementById('result');
     resultDiv.innerHTML = message;
-
+    centerX.val(center_latlng.getLat());
+    centerY.val(center_latlng.getLng());
 });
 
 
+
+// var tmp_div = $('#tmp_div');
+// tmp_div.appe
 
 
 
 
 // 거리계산 활용? polyline.getlength?
-const polyline = new window.daum.maps.Polyline({
+/* const polyline = new window.daum.maps.Polyline({
 	map : map,
 	path : [
 		new window.daum.maps.LatLng(center_latlng.getLat(), center_latlng.getLng()),
 		new window.daum.maps.LatLng(center_latlng.getLat(), center_latlng.getLng())
 	],
 	strokeWeight : 0
-});
+}); */
 
 
 
