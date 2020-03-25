@@ -63,8 +63,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-
-        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.56496830314491,126.93990862062978))
+        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)
@@ -229,18 +229,49 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
 
-    #마커 다 지우는 메소드
-    def map_removeMarkers(self) :
+
+
+
+
+    #좌표로 주소 얻기
+    #***수정중
+    def coord_to_address(self, lat, lng) :
+
+        print(lat)
+        print(lng)
         script = """
-        removeMarkers();
+
+        var coord = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+        var c2a = function(result, status) {
+            tmp_div.append("result0 -"+result[0].address.address_name);
+
+            go_py_result = result[0].address.address_name;
+
+            //return result[0].address.address_name;
+            //if (status === kakao.maps.services.Status.OK) {
+            //}
+        };
+        geocoder.coord2Address(coord.getLng(), coord.getLat(), c2a);
+
+        return go_py_result;
         """
-        self.run(script)
+        result = self.run(script)
+        print(result)
+        return result
 
 
     #지도 확대 레벨 설정
     def map_setLevel(self, level) :
         script = """
         map.setLevel("""+str(level)+""")
+        """
+        self.run(script)
+
+
+    #마커 다 지우는 메소드
+    def map_removeMarkers(self) :
+        script = """
+        removeMarkers();
         """
         self.run(script)
 
