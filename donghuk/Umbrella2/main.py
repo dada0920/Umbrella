@@ -25,7 +25,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-
+import random
 
 #웹 엔진에서 파이썬으로 신호주기
 
@@ -60,6 +60,9 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
 
+        # self.pushButton.clicked.connect(self.map_removeMarkers)
+
+        # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
 
         self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
@@ -226,20 +229,20 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
 
-        #마커 다 지우는 메소드
-        def removeMarkers(self) :
-            script = """
-            removeMarkers();
-            """
-            self.run(script)
+    #마커 다 지우는 메소드
+    def map_removeMarkers(self) :
+        script = """
+        removeMarkers();
+        """
+        self.run(script)
 
 
-        #지도 확대 레벨 설정
-        def map_setLevel(self, level) :
-            script = """
-            map.setLevel("""+str(level)+""")
-            """
-            self.run(script)
+    #지도 확대 레벨 설정
+    def map_setLevel(self, level) :
+        script = """
+        map.setLevel("""+str(level)+""")
+        """
+        self.run(script)
 
 
 if __name__ == "__main__" :
