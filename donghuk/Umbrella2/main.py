@@ -24,8 +24,12 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+import subprocess
+
 
 import random
+
+#python -m http.server
 
 #웹 엔진에서 파이썬으로 신호주기
 
@@ -36,7 +40,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)  # 초기화
-        self.url = QUrl("http://localhost:8080/umbrella")
+        self.url = QUrl("http://localhost:8000/umbrella2.html")
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
         self.page.setUrl(self.url)
@@ -51,7 +55,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # webdriver 설정(chrome) --headless
         self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="webdriver/Chrome/chromedriver.exe")
 
-        self.browser.get("http://localhost:8080/umbrella")
+        self.browser.get("http://localhost:8000/umbrella2.html")
 
 
         self.comboBox.addItem("키워드")
@@ -63,8 +67,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.56496830314491,126.93990862062978))
-        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+        # self.pushButton.clicked.connect(lambda: self.coord_to_address(37.56496830314491,126.93990862062978))
+        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)
@@ -221,9 +225,9 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         return '['+result_arr.toString()+']';
         """
         result = list(map(int, eval(self.run(script))))
-        # print(result)
-        # for i in result :
-        #     print(f"거리 : {i}m, type : {type(i)}")
+        print(result)
+        for i in result :
+            print(f"거리 : {i}m, type : {type(i)}")
 
         return result
 
@@ -242,6 +246,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         script = """
 
         var coord = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+
+
         var c2a = function(result, status) {
             tmp_div.append("result0 -"+result[0].address.address_name);
 
@@ -251,6 +257,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
             //if (status === kakao.maps.services.Status.OK) {
             //}
         };
+
+
         geocoder.coord2Address(coord.getLng(), coord.getLat(), c2a);
 
         return go_py_result;
@@ -277,6 +285,11 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
 if __name__ == "__main__" :
+    # command = "python -m http.server"
+    # subprocess.Popen("e:", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # subprocess.Popen("cd umbrella/donghuk/umbrella2", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # (stdoutdata, stderrdata) = popen.communicate()
     app = QApplication(sys.argv)
     window = TestForm()
     window.show()
