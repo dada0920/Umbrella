@@ -40,10 +40,11 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)  # 초기화
-        self.url = QUrl("http://localhost:8000/umbrella2.html")
+        self.url = "http://localhost:8080/umbrella"
+        # self.url = "http://localhost:8000/umbrella2.html"
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
-        self.page.setUrl(self.url)
+        self.page.setUrl(QUrl(self.url))
         self.page.setView(self.webEngineView)
 
         chrome_option = Options()
@@ -55,7 +56,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # webdriver 설정(chrome) --headless
         self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="webdriver/Chrome/chromedriver.exe")
 
-        self.browser.get("http://localhost:8000/umbrella2.html")
+        self.browser.get(self.url)
 
 
         self.comboBox.addItem("키워드")
@@ -64,19 +65,13 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
 
-<<<<<<< HEAD
-        # self.pushButton.clicked.connect(self.search)
-
-        self.pushButton.clicked.connect(self.returnP)
-=======
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-        # self.pushButton.clicked.connect(lambda: self.coord_to_address(37.56496830314491,126.93990862062978))
-        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
->>>>>>> 0330ed5ae545ea254047fc7ced8df2913bf465bc
         self.lineEdit.returnPressed.connect(self.search)
         self.init_my_location()
         self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
@@ -212,22 +207,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # 기본값으로 '내위치'의 좌표
         center = center or [self.my_location_lat, self.my_location_lng]
 
-<<<<<<< HEAD
-    def returnP(self) :
-        script = """
-        $(function(){
-            var x = document.getElementById('centerY').value;
-            return x
-        })
-        """
-        # result = self.run(script)
-        # print(result)
-        print(str(self.page.scripts()))
-
-    def run(self, script) :
-        result = self.page.runJavaScript(script)
-        return result
-=======
         script = """
         var tmp_point_arr = """+str(pointList)+"""
         var tmp_center = """+str(center)+"""
@@ -259,35 +238,63 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
 
-    #좌표로 주소 얻기
-    #***수정중
-    def coord_to_address(self, lat, lng) :
-
+    #좌표로 주소 얻기 idx
+    #0 : 지번주소
+    #1 : 지번주소 - 시도단위
+    #2 : 지번주소 - 구 단위
+    #3 : 지번주소 - 동 단위
+    #4 : 지번주소 - 우편번호(6자리)
+    #없을경우 ""
+    def coord_to_address(self, lat, lng, idx) :
+        if not idx in (0,1,2,3,4) :
+            idx = 0
+        result = ""
         print(lat)
         print(lng)
         script = """
-
+        go_py_result = '대기중'
         var coord = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
-
-
         var c2a = function(result, status) {
             tmp_div.append("result0 -"+result[0].address.address_name);
+            //go_py_result = result[0].address.address_name;
+            var idx = """+str(idx)+"""
 
-            go_py_result = result[0].address.address_name;
 
+            if(idx === 0){
+                go_py_result = result[0].address.address_name;
+            }else if(idx === 1){
+                go_py_result = result[0].address.region_1depth_name;
+            }else if(idx === 2){
+                go_py_result = result[0].address.region_2depth_name;
+            }else if(idx === 3){
+                go_py_result = result[0].address.region_3depth_name;
+            }else if(idx === 4){
+                go_py_result = result[0].address.zip_code;
+            }else{
+                go_py_result = result[0].address.address_name;
+            }
+
+            if(go_py_result === '대기중'){
+                go_py_result = '';
+            }
+            //go_py_result = result[0].address.region_1depth_name;
             //return result[0].address.address_name;
             //if (status === kakao.maps.services.Status.OK) {
             //}
         };
-
-
         geocoder.coord2Address(coord.getLng(), coord.getLat(), c2a);
-
-        return go_py_result;
         """
-        result = self.run(script)
-        print(result)
-        return result
+        script2 = "return go_py_result;"
+        self.run(script)
+        for i in range(50) :
+            result = self.run(script2)
+            if result != "대기중" :
+                print("idx : ",idx,"c 2 a : ",result)
+                return result
+                break
+        print("idx : ",idx,"c 2 a : ",result)
+        return ""
+
 
 
     #지도 확대 레벨 설정
@@ -306,7 +313,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         self.run(script)
 
 
->>>>>>> 0330ed5ae545ea254047fc7ced8df2913bf465bc
 if __name__ == "__main__" :
     # command = "python -m http.server"
     # subprocess.Popen("e:", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
