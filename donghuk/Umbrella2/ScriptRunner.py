@@ -1,125 +1,21 @@
-import sys
-from PyQt5.QtWidgets import *
-from PyQt5 import QtCore
-from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl
-import re
-import datetime
-from ui.main_ui import Ui_MainWindow
-import pytube
-from threading import Thread
-from PyQt5.QtCore import *
-import subprocess
-from PyQt5.QtWebEngineWidgets import QWebEnginePage
-import json
-import os
-import requests
-
-from PyQt5.QtPositioning import *
-
-
-
-import sys
-import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from PyQt5.QtWebEngineWidgets import QWebEnginePage
+
+class Runner :
+
+    def __init__(self, page, browser) :
+        self.page = page
+        self.browser = browser
+        # chrome_option = Options()
+        # chrome_option.add_argument("--headless")
+        # chrome_option.add_argument("--mute-audio")
+        # self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="webdriver/Chrome/chromedriver.exe")
+        # self.browser.get(url)
 
 
-
-import random
-
-
-
-from ScriptRunner import Runner
-#python -m http.server
-
-#웹 엔진에서 파이썬으로 신호주기
-#https://doc.qt.io/qtforpython/PySide2/QtWebEngineWidgets/QWebEnginePage.html#PySide2.QtWebEngineWidgets.PySide2.QtWebEngineWidgets.QWebEnginePage.runJavaScript
-#https://www.riverbankcomputing.com/static/Docs/PyQt5/api/qtwebenginewidgets/qwebenginepage.html#Feature
-
-class TestForm(QMainWindow, Ui_MainWindow) :
-    #생성자
-    def __init__(self) :
-        super().__init__()
-        self.init_my_location()
-        self.setupUi(self)  # 초기화
-        # self.url = "http://localhost:8080/umbrella"
-        self.url = "http://localhost:8000/umbrella2.html"
-        self.webEngineView.load(QUrl(self.url))
-        self.page = QWebEnginePage()
-        self.page.setUrl(QUrl(self.url))
-        self.page.setView(self.webEngineView)
-
-        chrome_option = Options()
-        #headless 모드
-        chrome_option.add_argument("--headless")
-        #사운드 뮤트
-        chrome_option.add_argument("--mute-audio")
-
-        # webdriver 설정(chrome) --headless
-        self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="webdriver/Chrome/chromedriver.exe")
-
-        self.browser.get(self.url)
-
-        self.runner = Runner(self.page, self.browser)
-        self.comboBox.addItem("키워드")
-        self.comboBox.addItem("주소")
-
-        # self.page.featurePermissionRequested.connect(self.setPagePermission)
-
-
-        # self.pushButton.clicked.connect(self.map_removeMarkers)
-
-        # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-<<<<<<< HEAD
-        #현재위치
-        #self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
-        #거리
-        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
-=======
-        self.pushButton.clicked.connect(lambda: self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, random.randrange(0,5)))
-        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
->>>>>>> 7cd52d73531bfcc94f7f61395b86afd859b89997
-        # self.pushButton.clicked.connect(self.test_a)
-        # self.pushButton.clicked.connect(self.search)
-        self.lineEdit.returnPressed.connect(self.search)
-        self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
-        # self.setMap(self.my_location_lat, self.my_location_lng)
-
-
-    #아이피로 현재 위치 받아오기(google api 사용)
-    def init_my_location(self) :
-        url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQKxbTt0MrFNH85kTJXzickMD5s88UVaI'
-        data = {
-            'considerIp': True,
-        }
-
-        result = requests.post(url, data)
-
-        my_location = json.loads(result.text)
-        # print(my_location)
-        # print("lat : ",my_location.get('location').get('lat'))
-        # print("lon : ",my_location.get('location').get('lng'))
-        self.my_location_lat = my_location.get('location').get('lat')
-        self.my_location_lng = my_location.get('location').get('lng')
-
-
-    def test_a(self) :
-        script ="""
-        return centerX.val()
-        """
-        centerX = self.run(script)
-        print(centerX)
-
-
-
-    #위치권한 요청이 왔을때 허용해줌
-    def setPagePermission(self, url, feature) :
-        self.page.setFeaturePermission(url, feature, QWebEnginePage.PermissionGrantedByUser)
-
-
-    def search(self) :
-        search_text = self.lineEdit.text().strip()
+    def search(self, search_text) :
+        # search_text = self.lineEdit.text().strip()
 
         if self.comboBox.currentIndex() == 0 :
             script = """
@@ -187,8 +83,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         else :
             return
         self.run(script)
-
-
 
 
 
@@ -325,6 +219,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
     def marking(self, data) :
+        self.map_removeMarkers()
         typeP = ["","약국","우체국","농협"]
         for item in data :
             addr = item.get('addr')
@@ -340,39 +235,30 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
             script = """
 
+            var markerPosition  = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            markerList.push(marker)
+
+            marker.setMap(map)
+
+            var iwContent = '<div style="padding:5px;">"""+str(name)+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                    iwPosition = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+"""); //인포윈도우 표시 위치입니다
 
 
-
-
-
-
-
-
+            var infowindow = new kakao.maps.InfoWindow({
+                position : iwPosition,
+                content : iwContent
+            });
 
             """
             self.run(script)
 
 
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__" :
-    # command = "python -m http.server"
-    # subprocess.Popen("e:", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    # subprocess.Popen("cd umbrella/donghuk/umbrella2", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    # popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    # (stdoutdata, stderrdata) = popen.communicate()
-    app = QApplication(sys.argv)
-    window = TestForm()
-    window.show()
-    app.exec_()
-    window.browser.close()
-    window.browser.quit()
+# if __name__ == "__main__" :
+    # page = QWebEnginePage()
+    # url = "http://localhost:8080/umbrella"
+    # runner = Runner(page, url)
