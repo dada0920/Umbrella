@@ -40,8 +40,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)  # 초기화
-        self.url = "http://localhost:8080/umbrella"
-        # self.url = "http://localhost:8000/umbrella2.html"
+        # self.url = "http://localhost:8080/umbrella"
+        self.url = "http://localhost:8000/umbrella2.html"
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
         self.page.setUrl(QUrl(self.url))
@@ -68,7 +68,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+        self.pushButton.clicked.connect(lambda: self.coord_to_address(self.my_location_lat,self.my_location_lng, random.randrange(0,5)))
         # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
@@ -103,12 +103,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         print(centerX)
 
 
-    def setMap(self,lat, lng) :
-        script = """
-        var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
-        map.setCenter(umbrella_location);
-        """
-        self.run(script)
 
     #위치권한 요청이 왔을때 허용해줌
     def setPagePermission(self, url, feature) :
@@ -299,15 +293,21 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         self.run(script)
 
 
-
+    #맵 이동
+    def setMap(self,lat, lng) :
+        script = """
+        var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+        map.setCenter(umbrella_location);
+        """
+        self.run(script)
 
 
 
     #스크립트 실행
     def run(self, script) :
-        print("run runJavaScript")
+        # print("run runJavaScript")
         self.page.runJavaScript(script)
-        print("run execute_Script")
+        # print("run execute_Script")
         result = self.browser.execute_script(script)
         return result
 
