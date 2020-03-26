@@ -42,8 +42,9 @@ class Marker:
             else:
                 return None
 
+
         #약국검색 메소드  data : jres["stores"], yg : 약국이름
-        def searchYG(data, yg) :
+        def searchYG(self,data, yg) :
             for i in range(len(data)) :
 
                 if data[i].get("name") == yg :
@@ -75,11 +76,24 @@ class Marker:
                 print("json.loads 실패!!!")
                 exit()
 
-            mask_info = self.searchaddr(jres["stores"], '강남구')
+            mask_info = self.searchYG(jres["stores"], 'empty')
+
             for i in range(len(mask_info)):
                 mask_info[i]
                 print("약국 이름 : ",mask_info[i].get('name'))
                 print("주소 : ",mask_info[i].get('addr'))
+                print("dnl : ",mask_info[i].get('lat'))
+                if mask_info[i].get('created_at')=='empty' :
+                    print("정보 갱신 미상")
+                elif mask_info[i].get('created_at') :
+                    print("정보 갱신 시각 : ",mask_info[i].get('created_at'))
+                if mask_info[i].get('remain_stat')==None or mask_info[i].get('remain_stat')=='break' or mask_info[i].get('remain_stat')=='empty':
+                    print("마스크 재고 : 없음")
+                elif mask_info[i].get('remain_stat')=='some' or mask_info[i].get('remain_stat')=='few':
+                    print("마스크 재고 : 부족")
+                elif mask_info[i].get('remain_stat')=='plenty':
+                    print("마스크 재고: 충분")
+
 
 if __name__ == "__main__" :
     marker=Marker()
