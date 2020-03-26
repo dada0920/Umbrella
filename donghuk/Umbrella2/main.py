@@ -19,7 +19,7 @@ from PyQt5.QtPositioning import *
 
 
 #웹 엔진에서 파이썬으로 신호주기
-
+#https://doc.qt.io/qtforpython/PySide2/QtWebEngineWidgets/QWebEnginePage.html#PySide2.QtWebEngineWidgets.PySide2.QtWebEngineWidgets.QWebEnginePage.runJavaScript
 #https://www.riverbankcomputing.com/static/Docs/PyQt5/api/qtwebenginewidgets/qwebenginepage.html#Feature
 
 class TestForm(QMainWindow, Ui_MainWindow) :
@@ -41,8 +41,9 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
 
+        # self.pushButton.clicked.connect(self.search)
 
-        self.pushButton.clicked.connect(self.search)
+        self.pushButton.clicked.connect(self.returnP)
         self.lineEdit.returnPressed.connect(self.search)
         self.init_my_location()
         self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
@@ -160,12 +161,20 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
         self.run(script)
 
-
-
+    def returnP(self) :
+        script = """
+        $(function(){
+            var x = document.getElementById('centerY').value;
+            return x
+        })
+        """
+        # result = self.run(script)
+        # print(result)
+        print(str(self.page.scripts()))
 
     def run(self, script) :
-        self.page.runJavaScript(script)
-
+        result = self.page.runJavaScript(script)
+        return result
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
     window = TestForm()
