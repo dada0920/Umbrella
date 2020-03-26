@@ -18,8 +18,21 @@ import requests
 from PyQt5.QtPositioning import *
 
 
-#웹 엔진에서 파이썬으로 신호주기
 
+import sys
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+import subprocess
+
+
+import random
+
+#python -m http.server
+
+#웹 엔진에서 파이썬으로 신호주기
+#https://doc.qt.io/qtforpython/PySide2/QtWebEngineWidgets/QWebEnginePage.html#PySide2.QtWebEngineWidgets.PySide2.QtWebEngineWidgets.QWebEnginePage.runJavaScript
 #https://www.riverbankcomputing.com/static/Docs/PyQt5/api/qtwebenginewidgets/qwebenginepage.html#Feature
 
 class TestForm(QMainWindow, Ui_MainWindow) :
@@ -27,12 +40,23 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)  # 초기화
-        self.url = QUrl("http://localhost:8080/umbrella")
+        self.url = "http://localhost:8080/umbrella"
+        # self.url = "http://localhost:8000/umbrella2.html"
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
-        self.page.setUrl(self.url)
+        self.page.setUrl(QUrl(self.url))
         self.page.setView(self.webEngineView)
 
+        chrome_option = Options()
+        #headless 모드
+        chrome_option.add_argument("--headless")
+        #사운드 뮤트
+        chrome_option.add_argument("--mute-audio")
+
+        # webdriver 설정(chrome) --headless
+        self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="webdriver/Chrome/chromedriver.exe")
+
+        self.browser.get(self.url)
 
 
         self.comboBox.addItem("키워드")
@@ -41,8 +65,13 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
 
+        # self.pushButton.clicked.connect(self.map_removeMarkers)
 
-        self.pushButton.clicked.connect(self.search)
+        # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
+        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+        # self.pushButton.clicked.connect(self.test_a)
+        # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)
         self.init_my_location()
         self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
@@ -66,6 +95,14 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         self.my_location_lng = my_location.get('location').get('lng')
 
 
+    def test_a(self) :
+        script ="""
+        return centerX.val()
+        """
+        centerX = self.run(script)
+        print(centerX)
+
+
     def setMap(self,lat, lng) :
         script = """
         var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
@@ -79,8 +116,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
     def search(self) :
-
-
         search_text = self.lineEdit.text().strip()
 
         if self.comboBox.currentIndex() == 0 :
@@ -133,9 +168,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
                         map: map,
                         position: coords
                     });
-
-
-
                     //*** 마커 담기
                     markerList.push(marker)
 
@@ -150,24 +182,146 @@ class TestForm(QMainWindow, Ui_MainWindow) :
             });    """
 
         else :
-
-
-
-
-
             return
-
-
         self.run(script)
 
 
 
 
+
+    #거리 계산하는 메소드
+    # center에는 기준좌표 [lat, lng]
+    # pointList에는 측정할 좌표 리스트 [ [lat,lng]  ,  [lat,lng] .......  ]
+    #리턴값은 측정한 거리(int값) list  ex) [ [0], [218667], [691542] ]
+    #단위는 m
+    def getDistance(self, center, pointList) :
+
+        # center가 None일 경우
+        # 기본값으로 '내위치'의 좌표
+        center = center or [self.my_location_lat, self.my_location_lng]
+
+        script = """
+        var tmp_point_arr = """+str(pointList)+"""
+        var tmp_center = """+str(center)+"""
+        var tmp_div = $('#tmp_div');
+        var result_arr = new Array();
+        for(var i=0; i < tmp_point_arr.length; i++){
+            const polyline = new window.daum.maps.Polyline({
+                map : map,
+                path : [
+                    new window.daum.maps.LatLng(tmp_center[0], tmp_center[1]),
+                    new window.daum.maps.LatLng(tmp_point_arr[i][0], tmp_point_arr[i][1])
+                ],
+                strokeWeight : 0
+            });
+            result_arr.push(polyline.getLength());
+        }
+        return '['+result_arr.toString()+']';
+        """
+        result = list(map(int, eval(self.run(script))))
+        print(result)
+        for i in result :
+            print(f"거리 : {i}m, type : {type(i)}")
+
+        return result
+
+
+
+
+
+
+
+    #좌표로 주소 얻기 idx
+    #0 : 지번주소
+    #1 : 지번주소 - 시도단위
+    #2 : 지번주소 - 구 단위
+    #3 : 지번주소 - 동 단위
+    #4 : 지번주소 - 우편번호(6자리)
+    #없을경우 ""
+    def coord_to_address(self, lat, lng, idx) :
+        if not idx in (0,1,2,3,4) :
+            idx = 0
+        result = ""
+        print(lat)
+        print(lng)
+        script = """
+        go_py_result = '대기중'
+        var coord = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+        var c2a = function(result, status) {
+            tmp_div.append("result0 -"+result[0].address.address_name);
+            //go_py_result = result[0].address.address_name;
+            var idx = """+str(idx)+"""
+
+
+            if(idx === 0){
+                go_py_result = result[0].address.address_name;
+            }else if(idx === 1){
+                go_py_result = result[0].address.region_1depth_name;
+            }else if(idx === 2){
+                go_py_result = result[0].address.region_2depth_name;
+            }else if(idx === 3){
+                go_py_result = result[0].address.region_3depth_name;
+            }else if(idx === 4){
+                go_py_result = result[0].address.zip_code;
+            }else{
+                go_py_result = result[0].address.address_name;
+            }
+
+        };
+        geocoder.coord2Address(coord.getLng(), coord.getLat(), c2a);
+        """
+        script2 = "return go_py_result;"
+        self.run(script)
+        for i in range(50) :
+            result = self.run(script2)
+            if result != "대기중" :
+                print("idx : ",idx,"c 2 a : ",result)
+                return result
+                break
+        print("idx : ",idx,"c 2 a : ",result)
+        return ""
+
+
+
+    #지도 확대 레벨 설정
+    def map_setLevel(self, level) :
+        script = """
+        map.setLevel("""+str(level)+""")
+        """
+        self.run(script)
+
+
+    #마커 다 지우는 메소드
+    def map_removeMarkers(self) :
+        script = """
+        removeMarkers();
+        """
+        self.run(script)
+
+
+
+
+
+
+    #스크립트 실행
     def run(self, script) :
+        print("run runJavaScript")
         self.page.runJavaScript(script)
+        print("run execute_Script")
+        result = self.browser.execute_script(script)
+        return result
+
+
 
 if __name__ == "__main__" :
+    # command = "python -m http.server"
+    # subprocess.Popen("e:", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # subprocess.Popen("cd umbrella/donghuk/umbrella2", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # (stdoutdata, stderrdata) = popen.communicate()
     app = QApplication(sys.argv)
     window = TestForm()
     window.show()
     app.exec_()
+    window.browser.close()
+    window.browser.quit()
