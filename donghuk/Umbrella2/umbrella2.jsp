@@ -43,20 +43,20 @@ function removeMarkers(){	//마커 전부 삭제하는 메소드
 	for(var i=0; i < markerList.length; i++){
 		markerList[i].setMap(null);
 	}
-}; 
+};
 
 
 
 
 
- var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-mapOption = { 
+ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+mapOption = {
     center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
     level: 3 // 지도의 확대 레벨
 };
 
 //지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-var map = new kakao.maps.Map(mapContainer, mapOption); 
+var map = new kakao.maps.Map(mapContainer, mapOption);
 
 //일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
 var mapTypeControl = new kakao.maps.MapTypeControl();
@@ -76,7 +76,7 @@ iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도�
 //인포윈도우를 생성하고 지도에 표시합니다
 /* var infowindow = new kakao.maps.InfoWindow({
 map: map, // 인포윈도우가 표시될 지도
-position : iwPosition, 
+position : iwPosition,
 content : iwContent,
 removable : iwRemoveable
 }); */
@@ -85,12 +85,13 @@ removable : iwRemoveable
 
 
 //지도에 마커를 표시하는 함수입니다
-function displayMarker(place) {
+function displayMarker(placeX,placeY,text) {
 
     // 마커를 생성하고 지도에 표시합니다
     var marker = new kakao.maps.Marker({
-        map: map,
-        position: new kakao.maps.LatLng(place.y, place.x)
+        map: map,//지도
+        position: new kakao.maps.LatLng(placeY, placeX),
+        text: text
     });
 
 
@@ -136,8 +137,8 @@ kakao.maps.event.addListener(map, 'center_changed', function() {
     // 지도의  레벨을 얻어옵니다
     current_level = map.getLevel();
 
-    // 지도의 중심좌표를 얻어옵니다 
-    center_latlng = map.getCenter(); 
+    // 지도의 중심좌표를 얻어옵니다
+    center_latlng = map.getCenter();
 
     var message = '<p>지도 레벨은 ' + current_level + ' 이고</p>';
     message += '<p>중심 좌표는 위도 ' + center_latlng.getLat() + ', 경도 ' + center_latlng.getLng() + '입니다</p>';
@@ -183,7 +184,7 @@ const polyline = new window.daum.maps.Polyline({
 /*var overlayOn = true , // 지도 위에 로드뷰 오버레이가 추가된 상태를 가지고 있을 변수
 container = document.getElementById('container'), // 지도와 로드뷰를 감싸고 있는 div 입니다
 mapWrapper = document.getElementById('mapWrapper'), // 지도를 감싸고 있는 div 입니다
-mapContainer = document.getElementById('map'), // 지도를 표시할 div 입니다 
+mapContainer = document.getElementById('map'), // 지도를 표시할 div 입니다
 rvContainer = document.getElementById('roadview'); //로드뷰를 표시할 div 입니다
 
 var mapCenter = new kakao.maps.LatLng(33.45042 , 126.57091), // 지도의 중심좌표
@@ -210,18 +211,18 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 
 
 
-//마커를 표시할 위치와 title 객체 배열입니다 
+//마커를 표시할 위치와 title 객체 배열입니다
 var positions = [
     {
-        title: '카카오', 
+        title: '카카오',
         latlng: new kakao.maps.LatLng(33.450705, 126.570677)
     },
     {
-        title: '생태연못', 
+        title: '생태연못',
         latlng: new kakao.maps.LatLng(33.450936, 126.569477)
     },
     {
-        title: '텃밭', 
+        title: '텃밭',
         latlng: new kakao.maps.LatLng(33.450879, 126.569940)
     },
     {
@@ -231,22 +232,22 @@ var positions = [
 ];
 
 // 마커 이미지의 이미지 주소입니다
-var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-    
+var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
 for (var i = 0; i < positions.length; i ++) {
-    
+
     // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new kakao.maps.Size(24, 35); 
-    
-    // 마커 이미지를 생성합니다    
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-    
+    var imageSize = new kakao.maps.Size(24, 35);
+
+    // 마커 이미지를 생성합니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
     // 마커를 생성합니다
     var marker = new kakao.maps.Marker({
         map: map, // 마커를 표시할 지도
         position: positions[i].latlng, // 마커를 표시할 위치
         title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage // 마커 이미지 
+        image : markerImage // 마커 이미지
     });
 }
 
@@ -264,16 +265,16 @@ for (var i = 0; i < positions.length; i ++) {
 
 
 
-//로드뷰 객체를 생성합니다 
-var rv = new kakao.maps.Roadview(rvContainer); 
+//로드뷰 객체를 생성합니다
+var rv = new kakao.maps.Roadview(rvContainer);
 
-//좌표로부터 로드뷰 파노라마 ID를 가져올 로드뷰 클라이언트 객체를 생성합니다 
-var rvClient = new kakao.maps.RoadviewClient(); 
+//좌표로부터 로드뷰 파노라마 ID를 가져올 로드뷰 클라이언트 객체를 생성합니다
+var rvClient = new kakao.maps.RoadviewClient();
 
-//로드뷰에 좌표가 바뀌었을 때 발생하는 이벤트를 등록합니다 
+//로드뷰에 좌표가 바뀌었을 때 발생하는 이벤트를 등록합니다
 kakao.maps.event.addListener(rv, 'position_changed', function() {
 
-// 현재 로드뷰의 위치 좌표를 얻어옵니다 
+// 현재 로드뷰의 위치 좌표를 얻어옵니다
 var rvPosition = rv.getPosition();
 
 // 지도의 중심을 현재 로드뷰의 위치로 설정합니다
@@ -311,7 +312,7 @@ draggable: true
 //마커에 dragend 이벤트를 등록합니다
 kakao.maps.event.addListener(marker, 'dragend', function(mouseEvent) {
 
-// 현재 마커가 놓인 자리의 좌표입니다 
+// 현재 마커가 놓인 자리의 좌표입니다
 var position = marker.getPosition();
 
 // 마커가 놓인 위치를 기준으로 로드뷰를 설정합니다
@@ -321,12 +322,12 @@ toggleRoadview(position);
 //지도에 클릭 이벤트를 등록합니다
 kakao.maps.event.addListener(map, 'click', function(mouseEvent){
 
-// 지도 위에 로드뷰 도로 오버레이가 추가된 상태가 아니면 클릭이벤트를 무시합니다 
+// 지도 위에 로드뷰 도로 오버레이가 추가된 상태가 아니면 클릭이벤트를 무시합니다
 if(!overlayOn) {
     return;
 }
 
-// 클릭한 위치의 좌표입니다 
+// 클릭한 위치의 좌표입니다
 var position = mouseEvent.latLng;
 
 // 마커를 클릭한 위치로 옮깁니다
@@ -356,7 +357,7 @@ rvClient.getNearestPanoId(position, 50, function(panoId) {
 function toggleMapWrapper(active, position) {
 if (active) {
 
-    // 지도를 감싸고 있는 div의 너비가 100%가 되도록 class를 변경합니다 
+    // 지도를 감싸고 있는 div의 너비가 100%가 되도록 class를 변경합니다
     container.className = '';
 
     // 지도의 크기가 변경되었기 때문에 relayout 함수를 호출합니다
@@ -391,7 +392,7 @@ if (active) {
     // 지도 위에 마커를 표시합니다
     marker.setMap(map);
 
-    // 마커의 위치를 지도 중심으로 설정합니다 
+    // 마커의 위치를 지도 중심으로 설정합니다
     marker.setPosition(map.getCenter());
 
     // 로드뷰의 위치를 지도 중심으로 설정합니다
