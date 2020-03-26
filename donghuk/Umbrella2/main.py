@@ -188,13 +188,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
 
 
-    def run(self, script) :
-        print("run runJavaScript")
-        self.page.runJavaScript(script)
-        print("run execute_Script")
-        result = self.browser.execute_script(script)
-        return result
-
 
     #거리 계산하는 메소드
     # center에는 기준좌표 [lat, lng]
@@ -274,13 +267,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
                 go_py_result = result[0].address.address_name;
             }
 
-            if(go_py_result === '대기중'){
-                go_py_result = '';
-            }
-            //go_py_result = result[0].address.region_1depth_name;
-            //return result[0].address.address_name;
-            //if (status === kakao.maps.services.Status.OK) {
-            //}
         };
         geocoder.coord2Address(coord.getLng(), coord.getLat(), c2a);
         """
@@ -311,6 +297,20 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         removeMarkers();
         """
         self.run(script)
+
+
+
+
+
+
+    #스크립트 실행
+    def run(self, script) :
+        print("run runJavaScript")
+        self.page.runJavaScript(script)
+        print("run execute_Script")
+        result = self.browser.execute_script(script)
+        return result
+
 
 
 if __name__ == "__main__" :
