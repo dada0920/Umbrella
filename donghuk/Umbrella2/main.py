@@ -68,8 +68,10 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
-        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+        #현재위치
+        #self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+        #거리
+        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)

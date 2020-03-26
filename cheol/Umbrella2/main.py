@@ -123,6 +123,7 @@ def main2():
         mask_info[i]
         print("약국 이름 : ",mask_info[i].get('name'))
         print("주소 : ",mask_info[i].get('addr'))
+        print("dnl : ",mask_info[i].get('lat'))
         if mask_info[i].get('created_at')=='empty' :
             print("정보 갱신 미상")
         elif mask_info[i].get('created_at') :
@@ -141,5 +142,4 @@ def main2():
 #  신뢰도 표시 == ??? 재고 입고 시간, 데이터의 정확성 (empty or null), 갱신시각
 
 if __name__ == "__main__" :
-    main()
     main2()
