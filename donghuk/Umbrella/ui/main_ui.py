@@ -52,7 +52,9 @@ class Ui_MainWindow(object):
         self.pushButton2.setGeometry(QtCore.QRect(345, 20, 51, 31))
         self.pushButton2.setObjectName("pushButton2")
 
-
+        self.pushButton3 = QtWidgets.QPushButton(self.groupBox_2)
+        self.pushButton3.setGeometry(QtCore.QRect(345, 50, 51, 31))
+        self.pushButton3.setObjectName("pushButton3")
 
 
         MainWindow.setMenuBar(self.menubar)
@@ -70,6 +72,7 @@ class Ui_MainWindow(object):
         self.groupBox_2.setTitle(_translate("MainWindow", "GroupBox"))
         self.pushButton.setText(_translate("MainWindow", "검색"))
         self.pushButton2.setText(_translate("MainWindow", "주변마킹"))
+        self.pushButton3.setText(_translate("MainWindow", "내위치"))
         self.groupBox_3.setTitle(_translate("MainWindow", "GroupBox"))
 
 from PyQt5 import QtWebEngineWidgets

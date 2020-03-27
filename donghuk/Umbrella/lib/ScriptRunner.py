@@ -213,7 +213,7 @@ class Runner :
         """
         # print("mpct run2")
         self.main.browser.execute_script(script2)
-        for i in range(100) :
+        for i in range(500) :
         # while True :
             result = self.main.browser.execute_script("return go_py_result2")
             # print("getcenter.....result : ",result)
@@ -250,7 +250,7 @@ class Runner :
         script3 = """
         return go_py_result
         """
-        for i in range(50) :
+        for i in range(500) :
             result = self.main.browser.execute_script(script3)
             if result != '' :
                 print(f"지도레벨 반환 :[{result}] ")
@@ -261,7 +261,7 @@ class Runner :
     #지도 레벨 설정
     def map_setLevel(self, level) :
         script = """
-        return map.setLevel("""+level+""")
+        map.setLevel("""+str(level)+""")
         """
         level = self.run(script)
         print(level)
@@ -279,6 +279,7 @@ class Runner :
 
     #맵 이동
     def setMap(self,lat, lng) :
+        self.map_setLevel(3)
         script = """
         var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
         map.setCenter(umbrella_location);
@@ -329,7 +330,7 @@ class Runner :
 
             marker.setMap(map);
 
-            var iwContent = '<div style="padding:5px;">"""+str(name)+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">"""+f"{name}   ({remain_stat})"+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                     iwPosition = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+"""); //인포윈도우 표시 위치입니다
 
 

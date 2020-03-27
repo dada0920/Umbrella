@@ -54,7 +54,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         # self.setMap(self.my_location_lat, self.my_location_lng)
 
         self.pushButton2.clicked.connect(self.mark_around)
-
+        self.pushButton3.clicked.connect(lambda: self.runner.setMap(self.my_location_lat,self.my_location_lng))
 
 
     def mark_around(self) :
