@@ -108,6 +108,26 @@ class Marker3:
                 list.append(data[i])
         return list
 
+    def main3(self):
+        #검색 질의 요청
+        res = self.SearchPharmacy("")
+        if(res == None):
+            print("검색 실패!!!")
+            exit()
+        #검색 결과를 json개체로 로딩
+        jres = json.loads(res)
+        if(jres == None):
+            print("json.loads 실패!!!")
+            exit()
+        mask_info = self.searchMK(jres["stores"])
+        return mask_info
+
+    def searchMK(self,data) :
+        list = []
+        for i in range(len(data)) :
+            list.append(data[i])
+        return list
+        
     #프로그램 진입점
     def main2(self):
         #검색 질의 요청
