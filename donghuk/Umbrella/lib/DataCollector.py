@@ -11,6 +11,8 @@ import json
 #위, 경도 기준
 #https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=34&lng=125&m=5000
 class DataCollector :
+
+
     def get_data_by_latlng(self, lat, lng, ds) :
         url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat="+str(lat)+"&lng="+str(lng)+"&m="+str(ds)+""
         return json.loads(urllib.request.urlopen(url).read()).get("stores")

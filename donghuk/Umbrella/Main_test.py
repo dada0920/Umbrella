@@ -41,7 +41,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
-        self.pushButton.clicked.connect(self.runner.map_getCenter)
+        self.pushButton.clicked.connect(self.runner.map_removeMarkers)
         # self.pushButton.clicked.connect(self.map_removeMarkers)
         # self.pushButton.clicked.connect(self.runner.map_getLevel)
         # self.pushButton.clicked.connect(lambda: self.runner.map_setLevel(random.randrange(7)))
@@ -53,11 +53,15 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.page.loadFinished.connect(lambda: self.runner.setMap(self.my_location_lat, self.my_location_lng))
         # self.setMap(self.my_location_lat, self.my_location_lng)
 
+        self.pushButton2.clicked.connect(self.mark_around)
 
 
 
-
-
+    def mark_around(self) :
+        self.runner.map_removeMarkers()
+        lat, lng = self.runner.map_getCenter()
+        data = self.dc.get_data_by_latlng(lat, lng, 500)
+        self.runner.marking(data)
 
 
 

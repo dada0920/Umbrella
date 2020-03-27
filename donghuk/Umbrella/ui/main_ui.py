@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
         self.webEngineView.setUrl(QtCore.QUrl("about:blank"))
         self.webEngineView.setObjectName("webEngineView")
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_2.setGeometry(QtCore.QRect(610, 0, 351, 261))
+        self.groupBox_2.setGeometry(QtCore.QRect(610, 0, 401, 261))
         self.groupBox_2.setObjectName("groupBox_2")
         self.comboBox = QtWidgets.QComboBox(self.groupBox_2)
         self.comboBox.setGeometry(QtCore.QRect(10, 20, 71, 31))
@@ -47,6 +47,14 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1045, 26))
         self.menubar.setObjectName("menubar")
+
+        self.pushButton2 = QtWidgets.QPushButton(self.groupBox_2)
+        self.pushButton2.setGeometry(QtCore.QRect(345, 20, 51, 31))
+        self.pushButton2.setObjectName("pushButton2")
+
+
+
+
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -61,6 +69,7 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
         self.groupBox_2.setTitle(_translate("MainWindow", "GroupBox"))
         self.pushButton.setText(_translate("MainWindow", "검색"))
+        self.pushButton2.setText(_translate("MainWindow", "주변마킹"))
         self.groupBox_3.setTitle(_translate("MainWindow", "GroupBox"))
 
 from PyQt5 import QtWebEngineWidgets

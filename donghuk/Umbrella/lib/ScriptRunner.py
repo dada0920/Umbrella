@@ -269,8 +269,10 @@ class Runner :
 
     #마커 다 지우는 메소드
     def map_removeMarkers(self) :
+        print("mk remove")
         script = """
         removeMarkers();
+        removeInfowindows();
         """
         self.run(script)
 
@@ -282,8 +284,8 @@ class Runner :
         map.setCenter(umbrella_location);
         """
         self.run(script)
-        self.d1 = self.main.dc.get_data_by_latlng(self.main.my_location_lat,self.main.my_location_lng,1000)
-        self.marking(self.d1)
+        # self.d1 = self.main.dc.get_data_by_latlng(self.main.my_location_lat,self.main.my_location_lng,1000)
+        # self.marking(self.d1)
 
         self.map_getCenter()
         self.map_getLevel()
@@ -323,9 +325,9 @@ class Runner :
                 position: markerPosition
             });
 
-            markerList.push(marker)
+            markerList.push(marker);
 
-            marker.setMap(map)
+            marker.setMap(map);
 
             var iwContent = '<div style="padding:5px;">"""+str(name)+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                     iwPosition = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+"""); //인포윈도우 표시 위치입니다
@@ -335,7 +337,9 @@ class Runner :
                 position : iwPosition,
                 content : iwContent
             });
+            infowindowList.push(infowindow);
             infowindow.open(map, marker);
+
 
             """
             self.run(script)
