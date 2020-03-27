@@ -205,7 +205,7 @@ class Runner :
             type : 'POST',
             url : '/umbrella/get_center',
             success : function(data){
-                go_py_result = data;
+                go_py_result2 = data;
             }
 
 
@@ -213,20 +213,23 @@ class Runner :
         """
         # print("mpct run2")
         self.main.browser.execute_script(script2)
-        for i in range(50) :
-            result = self.main.browser.execute_script("return go_py_result")
+        for i in range(100) :
+        # while True :
+            result = self.main.browser.execute_script("return go_py_result2")
             # print("getcenter.....result : ",result)
+            print("getcen,,,,,",result)
             if result != "" :
+                return result.split()[0], result.split()[1]
+                print("getcenter.....return : ",result.split()[0], result.split()[1])
                 break
-        print("getcenter.....return : ",result.split()[0], result.split()[1])
-        return result.split()[0], result.split()[1]
+        print("getcen,,,,,",result)
 
 
 
     #지도 확대 레벨 확인
     def map_getLevel(self) :
         script = """
-        var go_py_result = 'av';
+
         $.ajax({
             type : 'POST',
             url : '/umbrella/save_level',
@@ -245,14 +248,14 @@ class Runner :
         """
         self.main.browser.execute_script(script2)
         script3 = """
-        while(true){
-            if(go_py_result !== ''){
-                return go_py_result
-            }
-        }
+        return go_py_result
         """
-        result = self.main.browser.execute_script(script3)
-        print("지도레벨 반환 : ",result)
+        for i in range(50) :
+            result = self.main.browser.execute_script(script3)
+            if result != '' :
+                print(f"지도레벨 반환 :[{result}] ")
+                return result
+        # print("지도레벨 반환 : ",result)
         return result
 
     #지도 레벨 설정
@@ -282,6 +285,8 @@ class Runner :
         self.d1 = self.main.dc.get_data_by_latlng(self.main.my_location_lat,self.main.my_location_lng,1000)
         self.marking(self.d1)
 
+        self.map_getCenter()
+        self.map_getLevel()
 
     #스크립트 실행
     def run(self, script) :

@@ -41,7 +41,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
-        self.pushButton.clicked.connect(self.runner.map_getLevel)
+        self.pushButton.clicked.connect(self.runner.map_getCenter)
         # self.pushButton.clicked.connect(self.map_removeMarkers)
         # self.pushButton.clicked.connect(self.runner.map_getLevel)
         # self.pushButton.clicked.connect(lambda: self.runner.map_setLevel(random.randrange(7)))
