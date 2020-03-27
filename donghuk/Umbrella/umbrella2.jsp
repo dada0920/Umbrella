@@ -48,7 +48,8 @@
 
 
 var tmp_div = $("#tmp_div");
-var go_py_result = "pyResult";
+var go_py_result = "";
+var go_py_result2 = "";
 
 var center_lat = $('#center_lat');
 var center_lng = $('#center_lng');
@@ -72,12 +73,12 @@ function removeMarkers(){	//마커 전부 삭제하는 메소드
 };
 
 //인포윈도우지우기
-/* function removeInfowindows(){
+function removeInfowindows(){
 	for(var i=0; i < infowindowList.length; i++){
-		
+		infowindowList[i].close();
 	}
 	infowindowList = [];
-} */
+}
 
 
 
