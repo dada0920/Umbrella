@@ -62,6 +62,9 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
 
         self.listWidget.itemActivated.connect(self.activateRow)
+        # self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
+        self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
+
 
     def mark_around(self) :
         self.remove_list()
@@ -70,10 +73,12 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
             return
         self.runner.map_removeMarkers()
         lat, lng = self.runner.map_getCenter()
-        data = self.dc.get_data_by_latlng(lat, lng, 650)
+        data = self.dc.get_data_by_latlng(lat, lng, 1000)
         self.runner.marking(data)
         self.show_list(data)
 
+        lat, lng = self.runner.map_getCenter()
+        self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
 
 
     def init_my_location(self) :

@@ -44,7 +44,7 @@ class Runner :
                     var bounds = new kakao.maps.LatLngBounds();
 
                     for (var i=0; i<data.length; i++) {
-                        //displayMarker(data[i]);
+                        displayMarker(data[i]);
                         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
                     }
 
