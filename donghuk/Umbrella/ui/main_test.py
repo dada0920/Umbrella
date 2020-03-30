@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         self.checkBox_3.setGeometry(QtCore.QRect(810, 600, 111, 31))
         self.checkBox_3.setObjectName("checkBox_3")
         self.listWidget = QtWidgets.QListWidget(MainWindow)
-        self.listWidget.setGeometry(QtCore.QRect(0, 630, 1081, 171))
+        self.listWidget.setGeometry(QtCore.QRect(0, 630, 921, 171))
         self.listWidget.setObjectName("listWidget")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
