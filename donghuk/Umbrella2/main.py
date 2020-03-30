@@ -24,11 +24,13 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-import subprocess
 
 
 import random
 
+
+
+from ScriptRunner import Runner
 #python -m http.server
 
 #웹 엔진에서 파이썬으로 신호주기
@@ -39,9 +41,10 @@ class TestForm(QMainWindow, Ui_MainWindow) :
     #생성자
     def __init__(self) :
         super().__init__()
+        self.init_my_location()
         self.setupUi(self)  # 초기화
-        self.url = "http://localhost:8080/umbrella"
-        # self.url = "http://localhost:8000/umbrella2.html"
+        # self.url = "http://localhost:8080/umbrella"
+        self.url = "http://localhost:8000/umbrella2.html"
         self.webEngineView.load(QUrl(self.url))
         self.page = QWebEnginePage()
         self.page.setUrl(QUrl(self.url))
@@ -58,7 +61,7 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
         self.browser.get(self.url)
 
-
+        self.runner = Runner(self.page, self.browser)
         self.comboBox.addItem("키워드")
         self.comboBox.addItem("주소")
 
@@ -68,12 +71,18 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.map_removeMarkers)
 
         # self.pushButton.clicked.connect(lambda: self.map_setLevel(random.randrange(7)))
-        self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+<<<<<<< HEAD
+        #현재위치
+        #self.pushButton.clicked.connect(lambda: self.coord_to_address(37.62244036,127.072065, 0))
+        #거리
+        self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+=======
+        self.pushButton.clicked.connect(lambda: self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, random.randrange(0,5)))
         # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
+>>>>>>> 7cd52d73531bfcc94f7f61395b86afd859b89997
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(self.search)
-        self.init_my_location()
         self.page.loadFinished.connect(lambda: self.setMap(self.my_location_lat, self.my_location_lng))
         # self.setMap(self.my_location_lat, self.my_location_lng)
 
@@ -103,12 +112,6 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         print(centerX)
 
 
-    def setMap(self,lat, lng) :
-        script = """
-        var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
-        map.setCenter(umbrella_location);
-        """
-        self.run(script)
 
     #위치권한 요청이 왔을때 허용해줌
     def setPagePermission(self, url, feature) :
@@ -299,17 +302,65 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         self.run(script)
 
 
-
+    #맵 이동
+    def setMap(self,lat, lng) :
+        script = """
+        var umbrella_location = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
+        map.setCenter(umbrella_location);
+        """
+        self.run(script)
 
 
 
     #스크립트 실행
     def run(self, script) :
-        print("run runJavaScript")
+        # print("run runJavaScript")
         self.page.runJavaScript(script)
-        print("run execute_Script")
+        # print("run execute_Script")
         result = self.browser.execute_script(script)
         return result
+
+
+
+
+
+    def marking(self, data) :
+        typeP = ["","약국","우체국","농협"]
+        for item in data :
+            addr = item.get('addr')
+            code = item.get('code')
+            created_at = item.get('created_at')
+            lat = item.get('lat')
+            lng = item.get('lng')
+            name = item.get('name')
+            remain_stat = item.get('remain_stat')
+            stock_at = item.get('stock_at')
+            type = typeP[int(item.get('type'))]
+            print(f"addr = {addr}\ncode = {code}\ncreated_at = {created_at}\nlat = {lat}\nlng = {lng}\nname = {name}\nremain_stat = {remain_stat}\nstock_at = {stock_at}\ntype = {type}")
+
+            script = """
+
+
+
+
+
+
+
+
+
+
+            """
+            self.run(script)
+
+
+
+
+
+
+
+
+
+
 
 
 

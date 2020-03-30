@@ -15,6 +15,7 @@ import json
 from threading import Thread
 from PyQt5.QtCore import *
 import subprocess
+from urllib.parse import urljoin
 
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = "utf-8")
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = "utf-8")
@@ -35,13 +36,11 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = "utf-8")
 # - 약국 별
 # (약국 이름을 검색하면 해당 약국의 정보 (마스크잔량, 오픈시간, 위치 등) 을 보여준다)
 def SearchPharmacy(addr):
-
     # 약국 검색 url
     url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
-    # option = "&display=3&sort=count"
-    address = "?address="+urllib.parse.quote(addr)
-    # url_address = url + address + option
-    url_address = url + address
+    addr = "?lat=37.6803112&lng=127.0549036&m=500"
+    # address = urllib.parse.quote(addr)
+    url_address = urljoin(url,addr)
 
     #Open API 검색 요청 개체 설정
     request = urllib.request.Request(url_address)
@@ -53,8 +52,6 @@ def SearchPharmacy(addr):
         return response.read().decode('utf-8')
     else:
         return None
-
-
 
 #약국검색 메소드  data : jres["stores"], yg : 약국이름
 def searchYG(data, yg) :
@@ -123,6 +120,7 @@ def main2():
         mask_info[i]
         print("약국 이름 : ",mask_info[i].get('name'))
         print("주소 : ",mask_info[i].get('addr'))
+        print("dnl : ",mask_info[i].get('lat'))
         if mask_info[i].get('created_at')=='empty' :
             print("정보 갱신 미상")
         elif mask_info[i].get('created_at') :
@@ -141,5 +139,4 @@ def main2():
 #  신뢰도 표시 == ??? 재고 입고 시간, 데이터의 정확성 (empty or null), 갱신시각
 
 if __name__ == "__main__" :
-    main()
     main2()

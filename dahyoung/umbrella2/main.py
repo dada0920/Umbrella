@@ -167,3 +167,9 @@ class TestForm(QMainWindow, Ui_MainWindow) :
         self.page.runJavaScript(script)
 
 if __name__ == "__main__" :
+        app = QApplication(sys.argv)
+        window = TestForm()
+        window.show()
+        app.exec_()
+        window.browser.close()
+        window.browser.quit()
