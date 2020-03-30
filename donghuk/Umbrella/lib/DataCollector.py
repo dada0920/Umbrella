@@ -14,8 +14,15 @@ class DataCollector :
 
 
     def get_data_by_latlng(self, lat, lng, ds) :
+        remainP = {'plenty' : '100개 이상', 'some' : '30개 이상 100개 미만', 'few' : '2개 이상 30개 미만', 'empty' : '1개 이하', 'break' : '판매중지'}
         url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat="+str(lat)+"&lng="+str(lng)+"&m="+str(ds)+""
-        return json.loads(urllib.request.urlopen(url).read()).get("stores")
+        result = json.loads(urllib.request.urlopen(url).read()).get("stores")
+        for i in result :
+            if i.get('remain_stat') in remainP :
+                i['remain_stat'] = remainP[i['remain_stat']]
+
+
+        return result
 
 
 

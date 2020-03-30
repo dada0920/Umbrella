@@ -13,13 +13,17 @@ class Runner :
         # self.browser.get(url)
 
 
-
+    def info_open(self, code) :
+        script = """
+        infowindow"""+str(code)+""".open(map, marker"""+str(code)+""");
+        """
+        self.run(script)
 
 
     def search(self, search_text) :
         # search_text = self.lineEdit.text().strip()
 
-        if self.main.comboBox.currentIndex() == 0 :
+        if True :
             script = """
             removeMarkers();
             // 주소-좌표 변환 객체를 생성합니다
@@ -50,7 +54,7 @@ class Runner :
 
 
             """
-        elif self.main.comboBox.currentIndex():
+        else:
             script = """
             removeMarkers();
             // 주소-좌표 변환 객체를 생성합니다
@@ -82,8 +86,6 @@ class Runner :
                 }
             });    """
 
-        else :
-            return
         self.run(script)
 
 

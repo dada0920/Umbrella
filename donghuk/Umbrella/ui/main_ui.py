@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QSize
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -37,7 +38,7 @@ class Ui_MainWindow(object):
         # self.listView.setGeometry(QtCore.QRect(10, 60, 331, 192))
         # self.listView.setObjectName("listView")
         self.listWidget = QtWidgets.QListWidget(self.groupBox_2)
-        self.listWidget.setGeometry(QtCore.QRect(10, 60, 331, 192))
+        self.listWidget.setGeometry(QtCore.QRect(10, 60, 401, 192))
         self.listWidget.setDragEnabled(True)
         self.listWidget.setObjectName("listWidget")
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)

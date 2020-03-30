@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl
-from ui.main_ui import Ui_MainWindow
+# from ui.main_ui import Ui_MainWindow
+from ui.main_test import Ui_MainWindow
 from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
 import os
@@ -36,8 +37,8 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
         self.runner = Runner(self)
         self.dc = DataCollector()
-        self.comboBox.addItem("키워드")
-        self.comboBox.addItem("주소")
+        # self.comboBox.addItem("키워드")
+        # self.comboBox.addItem("주소")
         self.itemList = []
         self.rowList = []
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
@@ -93,9 +94,9 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
     def setButton(self) :
         if self.page.url().toString().strip().startswith("http://localhost:8080/umbrella") :
-            self.pushButton2.setText("마킹")
+            self.pushButton2.setText("판매처 탐색")
         else :
-            self.pushButton2.setText("원래지도로")
+            self.pushButton2.setText("지도 새로고침")
 
     def show_list(self, data) :
         for i in range(len(data)) :
@@ -115,6 +116,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
     def activateRow(self, row) :
         self.runner.setMap(self.rowList[int(row.whatsThis())].lat,self.rowList[int(row.whatsThis())].lng)
+        self.runner.info_open(self.rowList[int(row.whatsThis())].code)
         # self.runner.map_setLevel(2)
         pass
 if __name__ == "__main__" :
