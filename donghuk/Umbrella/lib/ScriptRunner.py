@@ -15,7 +15,7 @@ class Runner :
 
     def info_open(self, code) :
         script = """
-        
+
         infowindow"""+str(code)+""".open(map, marker"""+str(code)+""");
         """
         self.main.page.runJavaScript(script)
@@ -336,7 +336,7 @@ class Runner :
                     iwPosition = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+"""); //인포윈도우 표시 위치입니다
 
 
-            let infowindow"""+str(code)+""" = new kakao.maps.InfoWindow({
+            var infowindow"""+str(code)+""" = new kakao.maps.InfoWindow({
                 position : iwPosition,
                 removable : iwRemoveable,
                 content : iwContent

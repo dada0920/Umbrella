@@ -13,7 +13,7 @@
 <div id="mapWrapper">
 
 <!-- 지도를 표시할 div 입니다 -->
-<div id="map" style="width:100%;height:480px;"></div>
+<div id="map" style="width:100%;height:585px;"></div>
 
 </div>
 <!-- 로드뷰 -->
@@ -177,7 +177,7 @@ kakao.maps.event.addListener(map, 'center_changed', function() {
     message += '<p>중심 좌표는 위도 ' + center_latlng.getLat() + ', 경도 ' + center_latlng.getLng() + '입니다</p>';
 
     var resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = message;
+    //resultDiv.innerHTML = message;
     center_lat.val(center_latlng.getLat());
     center_lng.val(center_latlng.getLng());
 });
