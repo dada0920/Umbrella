@@ -76,8 +76,6 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         data = self.dc.get_data_by_latlng(lat, lng, 1000)
         self.runner.marking(data)
         self.show_list(data)
-
-        lat, lng = self.runner.map_getCenter()
         self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
 
 

@@ -150,7 +150,7 @@ class Runner :
         go_py_result = '대기중'
         var coord = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
         var c2a = function(result, status) {
-            tmp_div.append("result0 -"+result[0].address.address_name);
+            //tmp_div.append("result0 -"+result[0].address.address_name);
             //go_py_result = result[0].address.address_name;
             var idx = """+str(idx)+"""
 
@@ -201,7 +201,7 @@ class Runner :
         self.main.page.runJavaScript(script)
 
         script2="""
-        go_py_result = '';
+        go_py_result2 = '';
 
 
         $.ajax({

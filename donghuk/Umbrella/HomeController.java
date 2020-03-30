@@ -18,43 +18,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-/**
- * Handles requests for the application home page.
- */
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class HomeController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
-		
+//		log.info("index 페이지 요청");
 		
 		return "index";
 	}
-	@GetMapping("umbrella")
-	public String umb1() {
+	@GetMapping("/umbrella")
+	public String umbrella() {
+//		log.info("umbrella 페이지 요청");
+		
 		return "umbrella2";
 	}
-	
-	
-	
 	
 	@PostMapping("/umbrella/save_center")
 	public void umbrella_save_center(String center_lat, String center_lng) {
 		
-		File file = new File("d:\\center.txt");
+		File file = new File("center.txt");
 		FileWriter writer = null;
 		
 		try {
-			writer = new FileWriter(file);
+			writer = new FileWriter(file, false);
 			writer.write(center_lat+" "+center_lng);
 			writer.flush();
 			
-			System.out.println("done");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -66,26 +60,27 @@ public class HomeController {
 				e2.printStackTrace();
 			}
 		}
-		
+		System.out.println("saveCenter_done");
 	}
 	
 	@PostMapping("/umbrella/get_center")
 	@ResponseBody
 	public String umbrella_get_center() {
 		String latlng = "";
-		File file = new File("d:\\center.txt");
+		File file = new File("center.txt");
 		try(FileReader filereader = new FileReader(file);
 			BufferedReader br = new BufferedReader(filereader)
 			) {
 			latlng = br.readLine();
-			System.out.println(latlng);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			
 		}
-		System.out.println("get_center : "+latlng);
+
+		System.out.println("getCenter_done"+latlng);
 		return latlng;
 	}
 
@@ -93,7 +88,7 @@ public class HomeController {
 	@PostMapping("/umbrella/save_level")
 	public void umbrella_save_level(String level) {
 		
-		File file = new File("d:\\level.txt");
+		File file = new File("level.txt");
 		FileWriter writer = null;
 		
 		try {
@@ -120,7 +115,7 @@ public class HomeController {
 	@ResponseBody
 	public String umbrella_get_level() {
 		String level = "";
-		File file = new File("d:\\level.txt");
+		File file = new File("level.txt");
 		try(FileReader filereader = new FileReader(file);
 			BufferedReader br = new BufferedReader(filereader)
 			) {
@@ -135,4 +130,5 @@ public class HomeController {
 		System.out.println("get_level2 : "+level);
 		return level;
 	}
+	
 }
