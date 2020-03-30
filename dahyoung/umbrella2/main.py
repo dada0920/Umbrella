@@ -14,7 +14,7 @@ from PyQt5.QtWebEngineWidgets import QWebEnginePage
 import json
 import os
 import requests
-
+import marker3
 from PyQt5.QtPositioning import *
 
 
@@ -60,8 +60,8 @@ class TestForm(QMainWindow, Ui_MainWindow) :
 
         my_location = json.loads(result.text)
         # print(my_location)
-        # print("lat : ",my_location.get('location').get('lat'))
-        # print("lon : ",my_location.get('location').get('lng'))
+        print("lat : ",my_location.get('location').get('lat'))
+        print("lon : ",my_location.get('location').get('lng'))
         self.my_location_lat = my_location.get('location').get('lat')
         self.my_location_lng = my_location.get('location').get('lng')
 
@@ -116,7 +116,14 @@ class TestForm(QMainWindow, Ui_MainWindow) :
             """
         elif self.comboBox.currentIndex():
             script = """
+
             removeMarkers();
+            var positions = [];
+            positions=Marker3.main3();
+            for (var i=0; i<positions.length;i++){
+                map:map,
+                position:new kakao.maps.LatLng(positions[i].get('lat')+positions[i].get('lng'))
+            }
             // 주소-좌표 변환 객체를 생성합니다
             var geocoder = new kakao.maps.services.Geocoder();
 
