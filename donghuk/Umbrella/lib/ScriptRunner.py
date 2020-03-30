@@ -39,7 +39,7 @@ class Runner :
                     var bounds = new kakao.maps.LatLngBounds();
 
                     for (var i=0; i<data.length; i++) {
-                        displayMarker(data[i]);
+                        //displayMarker(data[i]);
                         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
                     }
 
@@ -65,12 +65,12 @@ class Runner :
                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
                     // 결과값으로 받은 위치를 마커로 표시합니다
-                    var marker = new kakao.maps.Marker({
+                    /*var marker = new kakao.maps.Marker({
                         map: map,
                         position: coords
                     });
                     //*** 마커 담기
-                    markerList.push(marker)
+                    markerList.push(marker)*/
 
 
                     // 인포윈도우로 장소에 대한 설명을 표시합니다

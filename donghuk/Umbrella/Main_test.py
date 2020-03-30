@@ -51,6 +51,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         # self.pushButton.clicked.connect(self.test_a)
         # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(lambda: self.runner.search(self.lineEdit.text().strip()))
+        self.pushButton.clicked.connect(lambda: self.runner.search(self.lineEdit.text().strip()))
         self.page.loadFinished.connect(lambda: self.runner.setMap(self.my_location_lat, self.my_location_lng))
         # self.setMap(self.my_location_lat, self.my_location_lng)
 

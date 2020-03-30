@@ -48,12 +48,12 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1045, 26))
         self.menubar.setObjectName("menubar")
 
-        self.pushButton2 = QtWidgets.QPushButton(self.groupBox_2)
-        self.pushButton2.setGeometry(QtCore.QRect(345, 20, 81, 41))
+        self.pushButton2 = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton2.setGeometry(QtCore.QRect(145, 20, 81, 41))
         self.pushButton2.setObjectName("pushButton2")
 
-        self.pushButton3 = QtWidgets.QPushButton(self.groupBox_2)
-        self.pushButton3.setGeometry(QtCore.QRect(345, 50, 51, 31))
+        self.pushButton3 = QtWidgets.QPushButton(self.groupBox_3)
+        self.pushButton3.setGeometry(QtCore.QRect(245, 50, 51, 31))
         self.pushButton3.setObjectName("pushButton3")
 
 
