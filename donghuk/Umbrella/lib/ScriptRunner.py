@@ -319,27 +319,33 @@ class Runner :
             # print(f"addr = {addr}\ncode = {code}\ncreated_at = {created_at}\nlat = {lat}\nlng = {lng}\nname = {name}\nremain_stat = {remain_stat}\nstock_at = {stock_at}\ntype = {type}")
 
             script = """
-
             var markerPosition  = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+""");
 
-            var marker = new kakao.maps.Marker({
+            var marker"""+str(code)+""" = new kakao.maps.Marker({
                 position: markerPosition
             });
 
-            markerList.push(marker);
+            markerList.push(marker"""+str(code)+""");
 
-            marker.setMap(map);
+            marker"""+str(code)+""".setMap(map);
 
-            var iwContent = '<div style="padding:5px;">"""+f"{name}   ({remain_stat})"+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/Hello World!,33.450701,126.570667" style="color:blue" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            var iwContent = '<div style="padding:5px;">"""+f"{name}   ({remain_stat})"+""" <br><a href="https://map.kakao.com/link/map/Hello World!,"""+str(lat)+""","""+str(lng)+"""" style="color:blue" target="_self">큰지도보기</a> <a href="https://map.kakao.com/link/to/"""+f'{name},{lat},{lng}'+"""" style="color:blue" target="_self">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
                     iwPosition = new kakao.maps.LatLng("""+str(lat)+""", """+str(lng)+"""); //인포윈도우 표시 위치입니다
 
 
-            var infowindow = new kakao.maps.InfoWindow({
+            var infowindow"""+str(code)+""" = new kakao.maps.InfoWindow({
                 position : iwPosition,
+                removable : iwRemoveable,
                 content : iwContent
             });
-            infowindowList.push(infowindow);
-            infowindow.open(map, marker);
+            infowindowList.push(infowindow"""+str(code)+""");
+            //infowindow"""+str(code)+""".open(map, marker);
+
+            kakao.maps.event.addListener(marker"""+str(code)+""", 'click', function() {
+                  // 마커 위에 인포윈도우를 표시합니다
+                  infowindow"""+str(code)+""".open(map, marker"""+str(code)+""");
+            });
+
 
 
             """

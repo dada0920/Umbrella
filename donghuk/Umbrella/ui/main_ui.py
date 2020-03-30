@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
 
         self.pushButton2 = QtWidgets.QPushButton(self.groupBox_2)
-        self.pushButton2.setGeometry(QtCore.QRect(345, 20, 51, 31))
+        self.pushButton2.setGeometry(QtCore.QRect(345, 20, 81, 41))
         self.pushButton2.setObjectName("pushButton2")
 
         self.pushButton3 = QtWidgets.QPushButton(self.groupBox_2)
