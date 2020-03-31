@@ -35,29 +35,18 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = "utf-8")
 # 서치기능
 # - 약국 별
 # (약국 이름을 검색하면 해당 약국의 정보 (마스크잔량, 오픈시간, 위치 등) 을 보여준다)
-<<<<<<< HEAD
-class Marker2:
-=======
 class Marker3:
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
     def __init__(self):
         pass
     def SearchPharmacy(self,addr):
 
         # 약국 검색 url
         url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json"
-<<<<<<< HEAD
-        addr = "?lat=37.6803112&lng=127.0549036&m=500"
-        # address = urllib.parse.quote(addr)
-        url_address = urljoin(url,addr)
-
-=======
         addr = "?lat=37.6803112&lng=127.0549036&m=1500"
         # address = urllib.parse.quote(addr)
         url_address = urljoin(url,addr)
 
 
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
         #Open API 검색 요청 개체 설정
         request = urllib.request.Request(url_address)
 
@@ -83,11 +72,7 @@ class Marker3:
     #프로그램 진입점
     def main(self):
         #검색 질의 요청
-<<<<<<< HEAD
-        res = SearchPharmacy("")
-=======
         res = self.SearchPharmacy("")
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
         if(res == None):
             print("검색 실패!!!")
             exit()
@@ -97,11 +82,7 @@ class Marker3:
             print("json.loads 실패!!!")
             exit()
 
-<<<<<<< HEAD
-        yg_info = searchYG(jres["stores"], "역삼오늘약국")
-=======
         yg_info = self.searchYG(jres["stores"], "역삼오늘약국")
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
 
         print("약국 이름 : ",yg_info.get('name'))
         print("주소 : ",yg_info.get('addr'))
@@ -120,15 +101,6 @@ class Marker3:
     #     ( 마스크 잔량 기준을 선택하면 해당 약국만 보여준다)
 
     # 마스크 잔량 기준약국검색 메소드  data : jres["remain_stat"], mk : 마스크 잔량
-<<<<<<< HEAD
-    def searchAddr(self,data, addr) :
-        list = []
-        for i in range(len(data)) :
-            if data[i].get("mk")==addr:
-                list.append(data[i])
-        return list
-
-=======
     def searchMK(self,data, mk) :
         list = []
         for i in range(len(data)) :
@@ -156,7 +128,6 @@ class Marker3:
             list.append(data[i])
         return list
 
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
     #프로그램 진입점
     def main2(self):
         #검색 질의 요청
@@ -170,24 +141,6 @@ class Marker3:
             print("json.loads 실패!!!")
             exit()
 
-<<<<<<< HEAD
-        mask_info = self.searchAddr(jres["stores"], 'empty')
-
-        for i in range(len(mask_info)):
-            mask_info[i]
-            print("위도 : ",mask_info[i].get('lat'))
-            print("경도 : ",mask_info[i].get('lng'))
-
-
-    # - 위치 기반 별
-    #     ( 지정한 위치 기준 반경 500m 이내의 판매 약국을 보여준다)
-
-    #  신뢰도 표시 == ??? 재고 입고 시간, 데이터의 정확성 (empty or null), 갱신시각
-
-if __name__ == "__main__" :
-    markerTest=Marker2()
-    markerTest.main2()
-=======
         mask_info = self.searchMK(jres["stores"], 'empty')
 
         for i in range(len(mask_info)):
@@ -215,4 +168,3 @@ if __name__ == "__main__" :
 if __name__ == "__main__" :
     markTest=Marker3()
     markTest.main2()
->>>>>>> fb9f9a6292aeedf796979bd6f94a2e210ff5dcb0
