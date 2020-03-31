@@ -127,7 +127,7 @@ class Marker3:
         for i in range(len(data)) :
             list.append(data[i])
         return list
-        
+
     #프로그램 진입점
     def main2(self):
         #검색 질의 요청
