@@ -85,6 +85,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
 
 
+
     def init_my_location(self) :
         url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQKxbTt0MrFNH85kTJXzickMD5s88UVaI'
         data = {

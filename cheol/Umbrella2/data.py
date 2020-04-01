@@ -15,6 +15,7 @@ res = req.urlopen(url).read()
 
 soup = BeautifulSoup(res, "html.parser")
 
+
 # 숫자만 가져오는것
 def numI(text) :
     textL=list(text)

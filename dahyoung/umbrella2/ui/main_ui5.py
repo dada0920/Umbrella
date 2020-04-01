@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.page)
         self.pushButton_3.setGeometry(QtCore.QRect(210, 0, 601, 431))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("D:/Umbrella/dahyoung/umbrella2/resource/umbrella5.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("D:/Umbrella/dahyoung/umbrella2/log/umbrella5.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon)
         self.pushButton_3.setIconSize(QtCore.QSize(600, 600))
         self.pushButton_3.setObjectName("pushButton_3")
