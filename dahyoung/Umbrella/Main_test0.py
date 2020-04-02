@@ -22,7 +22,7 @@ from matplotlib import font_manager, rc
 from PyQt5 import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-
+import uuid
 class Umbrella(QMainWindow, Ui_MainWindow) :
     #생성자
     def __init__(self) :
@@ -41,28 +41,20 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         chrome_option.add_argument("--mute-audio")
         self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="resources/chromedriver.exe")
         self.browser.get(self.url)
-
+        self.user_uuid = uuid.uuid4()
         self.runner = Runner(self)
         self.dc = DataCollector(self)
         # self.comboBox.addItem("키워드")
         # self.comboBox.addItem("주소")
         self.itemList = []
         self.rowList = []
-        # self.page.featurePermissionRequested.connect(self.setPagePermission)
+
 
         #page 변환
         self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.pushButton__image.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
         self.pushButton.clicked.connect(self.runner.map_removeMarkers)
         #intro 데이터 입력
-        self
-        # self.pushButton.clicked.connect(self.map_removeMarkers)
-        # self.pushButton.clicked.connect(self.runner.map_getLevel)
-        # self.pushButton.clicked.connect(lambda: self.runner.map_setLevel(random.randrange(7)))
-        # self.pushButton.clicked.connect(lambda: self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, random.randrange(0,5)))
-        # self.pushButton.clicked.connect(lambda: self.getDistance([33.450500,126.569968],[[33.450500,126.569968],[35.404195,126.886323],[39.668777,126.065913]]))
-        # self.pushButton.clicked.connect(self.test_a)
-        # self.pushButton.clicked.connect(self.search)
         self.lineEdit.returnPressed.connect(lambda: self.runner.search(self.lineEdit.text().strip()))
         self.pushButton.clicked.connect(lambda: self.runner.search(self.lineEdit.text().strip()))
         self.page.loadFinished.connect(lambda: self.runner.setMap(self.my_location_lat, self.my_location_lng))
@@ -88,14 +80,15 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.runner.marking(data)
         self.show_list(data)
         self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
+        print("uuid---------------------------------",self.user_uuid)
 
     # def checkBox_mark_around(self):
 
     #표지
     def intro(self):
-        data=self.dc.A()
 
-        self.show_intro_list(data)
+
+        self.dc.show_intro_list(self.dc.A())
     #그래프
         self.dc.intro_graph()
 
@@ -133,50 +126,50 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
             self.rowList.append(row)
 
     #intro show_list
-    def show_intro_list(self,data):
-        _translate = QtCore.QCoreApplication.translate
-
-        self.patient = QtWidgets.QLabel(self.widget_1)
-        self.patient.setStyleSheet('color:white; font-size:20px')
-        self.patient.setGeometry(QtCore.QRect(0,0,210,125))
-        self.patient.setText(_translate("MainWindow",
-        "<html><head/><body><p align=\"center\">확진환자<br/> "+
-        "<span style='font-size:50px'>"
-        +str(data[0])+"</span><br/>"+
-        "<span style='font-size:15px'>"+str(data[1])+
-        "</span></p></body></html>"))
-
-        # self.patient.setGeometry(QtCore.QRect())
-        self.perfect = QtWidgets.QLabel(self.widget_2)
-        self.perfect.setStyleSheet('color:white; font-size:20px')
-        self.perfect.setGeometry(QtCore.QRect(0,0,210,125))
-        self.perfect.setText(_translate("MainWindow",
-        "<html><head/><body><p align=\"center\">완치자<br/> "+
-        "<span style='font-size:50px'>"
-        +str(data[2])+"</span><br/>"+
-        "<span style='font-size:15px'>"+str(data[3])+
-        "</span></p></body></html>"))
-
-        # self.widget_3.setText(str(data[4])+" "+str(data[5]))
-        self.care = QtWidgets.QLabel(self.widget_3)
-        self.care.setStyleSheet('color:white; font-size:20px')
-        self.care.setGeometry(QtCore.QRect(0,0,210,125))
-        self.care.setText(_translate("MainWindow",
-        "<html><head/><body><p align=\"center\">치료중<br/> "+
-        "<span style='font-size:50px'>"
-        +str(data[4])+"</span><br/>"+
-        "<span style='font-size:15px'>"+str(data[5])+
-        "</span></p></body></html>"))
-        # self.widget_4.setText(str(data[6])+" "+str(data[7]))
-        self.dead = QtWidgets.QLabel(self.widget_4)
-        self.dead.setStyleSheet('color:white; font-size:20px')
-        self.dead.setGeometry(QtCore.QRect(0,0,210,125))
-        self.dead.setText(_translate("MainWindow",
-        "<html><head/><body><p align=\"center\">사망<br/> "+
-        "<span style='font-size:50px'>"
-        +str(data[6])+"</span><br/>"+
-        "<span style='font-size:15px'>"+str(data[7])+
-        "</span></p></body></html>"))
+    # def show_intro_list(self,data):
+    #     _translate = QtCore.QCoreApplication.translate
+    #
+    #     self.patient = QtWidgets.QLabel(self.widget_1)
+    #     self.patient.setStyleSheet('color:white; font-size:20px')
+    #     self.patient.setGeometry(QtCore.QRect(0,0,210,125))
+    #     self.patient.setText(_translate("MainWindow",
+    #     "<html><head/><body><p align=\"center\">확진환자<br/> "+
+    #     "<span style='font-size:50px'>"
+    #     +str(data[0])+"</span><br/>"+
+    #     "<span style='font-size:15px'>"+str(data[1])+
+    #     "</span></p></body></html>"))
+    #
+    #     # self.patient.setGeometry(QtCore.QRect())
+    #     self.perfect = QtWidgets.QLabel(self.widget_2)
+    #     self.perfect.setStyleSheet('color:white; font-size:20px')
+    #     self.perfect.setGeometry(QtCore.QRect(0,0,210,125))
+    #     self.perfect.setText(_translate("MainWindow",
+    #     "<html><head/><body><p align=\"center\">완치자<br/> "+
+    #     "<span style='font-size:50px'>"
+    #     +str(data[2])+"</span><br/>"+
+    #     "<span style='font-size:15px'>"+str(data[3])+
+    #     "</span></p></body></html>"))
+    #
+    #     # self.widget_3.setText(str(data[4])+" "+str(data[5]))
+    #     self.care = QtWidgets.QLabel(self.widget_3)
+    #     self.care.setStyleSheet('color:white; font-size:20px')
+    #     self.care.setGeometry(QtCore.QRect(0,0,210,125))
+    #     self.care.setText(_translate("MainWindow",
+    #     "<html><head/><body><p align=\"center\">치료중<br/> "+
+    #     "<span style='font-size:50px'>"
+    #     +str(data[4])+"</span><br/>"+
+    #     "<span style='font-size:15px'>"+str(data[5])+
+    #     "</span></p></body></html>"))
+    #     # self.widget_4.setText(str(data[6])+" "+str(data[7]))
+    #     self.dead = QtWidgets.QLabel(self.widget_4)
+    #     self.dead.setStyleSheet('color:white; font-size:20px')
+    #     self.dead.setGeometry(QtCore.QRect(0,0,210,125))
+    #     self.dead.setText(_translate("MainWindow",
+    #     "<html><head/><body><p align=\"center\">사망<br/> "+
+    #     "<span style='font-size:50px'>"
+    #     +str(data[6])+"</span><br/>"+
+    #     "<span style='font-size:15px'>"+str(data[7])+
+    #     "</span></p></body></html>"))
 
     def remove_list(self) :
         for i in range(len(self.itemList)) :

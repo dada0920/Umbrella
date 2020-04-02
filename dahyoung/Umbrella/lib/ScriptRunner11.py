@@ -55,37 +55,37 @@ class Runner :
 
 
             """
-        # else:
-        #     script = """
-        #     removeMarkers();
-        #     // 주소-좌표 변환 객체를 생성합니다
-        #     var geocoder = new kakao.maps.services.Geocoder();
-        #
-        #     // 주소로 좌표를 검색합니다
-        #     geocoder.addressSearch('"""+search_text+"""', function(result, status) {
-        #
-        #         // 정상적으로 검색이 완료됐으면
-        #          if (status === kakao.maps.services.Status.OK) {
-        #
-        #             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        #
-        #             // 결과값으로 받은 위치를 마커로 표시합니다
-        #             /*var marker = new kakao.maps.Marker({
-        #                 map: map,
-        #                 position: coords
-        #             });
-        #             //*** 마커 담기
-        #             markerList.push(marker)*/
-        #
-        #
-        #             // 인포윈도우로 장소에 대한 설명을 표시합니다
-        #
-        #             infowindow.open(map, marker);
-        #
-        #             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        #             map.setCenter(coords);
-        #         }
-        #     });    """
+        else:
+            script = """
+            removeMarkers();
+            // 주소-좌표 변환 객체를 생성합니다
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            // 주소로 좌표를 검색합니다
+            geocoder.addressSearch('"""+search_text+"""', function(result, status) {
+
+                // 정상적으로 검색이 완료됐으면
+                 if (status === kakao.maps.services.Status.OK) {
+
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 결과값으로 받은 위치를 마커로 표시합니다
+                    /*var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords
+                    });
+                    //*** 마커 담기
+                    markerList.push(marker)*/
+
+
+                    // 인포윈도우로 장소에 대한 설명을 표시합니다
+
+                    infowindow.open(map, marker);
+
+                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                    map.setCenter(coords);
+                }
+            });    """
 
         self.run(script)
 
@@ -194,7 +194,7 @@ class Runner :
         $.ajax({
             type : 'POST',
             url : '/umbrella/save_center',
-            data :{'center_lat' : map.getCenter().getLat(),'center_lng' : map.getCenter().getLng(), 'user_uuid' : '"""+str(self.main.user_uuid)+"""'}
+            data :{'center_lat' : map.getCenter().getLat(),'center_lng' : map.getCenter().getLng()}
         });
         """
         # print("mpct run1")
@@ -207,9 +207,8 @@ class Runner :
         $.ajax({
             type : 'POST',
             url : '/umbrella/get_center',
-            data : {'user_uuid' : '"""+str(self.main.user_uuid)+"""'},
-            success : function(data_center){
-                go_py_result2 = data_center;
+            success : function(data){
+                go_py_result2 = data;
             }
 
 
@@ -237,7 +236,7 @@ class Runner :
         $.ajax({
             type : 'POST',
             url : '/umbrella/save_level',
-            data :{'level' : map.getLevel(),'user_uuid' : '"""+str(self.main.user_uuid)+"""'}
+            data :{'level' : map.getLevel()}
         });
         """
         self.main.page.runJavaScript(script)
@@ -245,9 +244,8 @@ class Runner :
         $.ajax({
             type : 'POST',
             url : '/umbrella/get_level',
-            data : {'user_uuid' : '"""+str(self.main.user_uuid)+"""'},
-            success : function(data_level){
-                go_py_result = data_level;
+            success : function(data){
+                go_py_result = data;
             }
         });
         """
