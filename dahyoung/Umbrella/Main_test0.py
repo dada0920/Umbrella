@@ -86,10 +86,9 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
     #표지
     def intro(self):
-
-
-        self.dc.show_intro_list(self.dc.A())
-    #그래프
+        #Text
+        self.dc.show_intro_list()
+        #그래프
         self.dc.intro_graph()
 
     def init_my_location(self) :
@@ -125,52 +124,6 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
             self.itemList.append(item)
             self.rowList.append(row)
 
-    #intro show_list
-    # def show_intro_list(self,data):
-    #     _translate = QtCore.QCoreApplication.translate
-    #
-    #     self.patient = QtWidgets.QLabel(self.widget_1)
-    #     self.patient.setStyleSheet('color:white; font-size:20px')
-    #     self.patient.setGeometry(QtCore.QRect(0,0,210,125))
-    #     self.patient.setText(_translate("MainWindow",
-    #     "<html><head/><body><p align=\"center\">확진환자<br/> "+
-    #     "<span style='font-size:50px'>"
-    #     +str(data[0])+"</span><br/>"+
-    #     "<span style='font-size:15px'>"+str(data[1])+
-    #     "</span></p></body></html>"))
-    #
-    #     # self.patient.setGeometry(QtCore.QRect())
-    #     self.perfect = QtWidgets.QLabel(self.widget_2)
-    #     self.perfect.setStyleSheet('color:white; font-size:20px')
-    #     self.perfect.setGeometry(QtCore.QRect(0,0,210,125))
-    #     self.perfect.setText(_translate("MainWindow",
-    #     "<html><head/><body><p align=\"center\">완치자<br/> "+
-    #     "<span style='font-size:50px'>"
-    #     +str(data[2])+"</span><br/>"+
-    #     "<span style='font-size:15px'>"+str(data[3])+
-    #     "</span></p></body></html>"))
-    #
-    #     # self.widget_3.setText(str(data[4])+" "+str(data[5]))
-    #     self.care = QtWidgets.QLabel(self.widget_3)
-    #     self.care.setStyleSheet('color:white; font-size:20px')
-    #     self.care.setGeometry(QtCore.QRect(0,0,210,125))
-    #     self.care.setText(_translate("MainWindow",
-    #     "<html><head/><body><p align=\"center\">치료중<br/> "+
-    #     "<span style='font-size:50px'>"
-    #     +str(data[4])+"</span><br/>"+
-    #     "<span style='font-size:15px'>"+str(data[5])+
-    #     "</span></p></body></html>"))
-    #     # self.widget_4.setText(str(data[6])+" "+str(data[7]))
-    #     self.dead = QtWidgets.QLabel(self.widget_4)
-    #     self.dead.setStyleSheet('color:white; font-size:20px')
-    #     self.dead.setGeometry(QtCore.QRect(0,0,210,125))
-    #     self.dead.setText(_translate("MainWindow",
-    #     "<html><head/><body><p align=\"center\">사망<br/> "+
-    #     "<span style='font-size:50px'>"
-    #     +str(data[6])+"</span><br/>"+
-    #     "<span style='font-size:15px'>"+str(data[7])+
-    #     "</span></p></body></html>"))
-
     def remove_list(self) :
         for i in range(len(self.itemList)) :
             self.itemList[i].setHidden(True)
@@ -180,18 +133,15 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
     def activateRow(self, row) :
         self.runner.setMap(self.rowList[int(row.whatsThis())].lat,self.rowList[int(row.whatsThis())].lng)
         self.runner.info_open(self.rowList[int(row.whatsThis())].code)
-        # self.runner.map_setLevel(2)
-        pass
+
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
     window = Umbrella()
     window.intro()
-
     window.show()
 
     app.exec_()
     window.browser.close()
     window.browser.quit()
-
     # print(f'{lat}\n{lng}')
     pass

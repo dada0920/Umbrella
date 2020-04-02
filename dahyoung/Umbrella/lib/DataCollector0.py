@@ -123,7 +123,9 @@ class DataCollector :
         lay.addWidget(canvas)
         canvas.show()
 
-    def show_intro_list(self,data):
+    def show_intro_list(self):
+        data=self.A()
+        print("show_intro_list")
         _translate = QtCore.QCoreApplication.translate
 
         self.main.patient = QtWidgets.QLabel(self.main.widget_1)
@@ -136,34 +138,34 @@ class DataCollector :
         "<span style='font-size:15px'>"+str(data[1])+
         "</span></p></body></html>"))
 
-        # # self.patient.setGeometry(QtCore.QRect())
-        # perfect = QtWidgets.QLabel(self.widget_2)
-        # perfect.setStyleSheet('color:white; font-size:20px')
-        # perfect.setGeometry(QtCore.QRect(0,0,210,125))
-        # perfect.setText(_translate("MainWindow",
-        # "<html><head/><body><p align=\"center\">완치자<br/> "+
-        # "<span style='font-size:50px'>"
-        # +str(data[2])+"</span><br/>"+
-        # "<span style='font-size:15px'>"+str(data[3])+
-        # "</span></p></body></html>"))
+        # self.patient.setGeometry(QtCore.QRect())
+        self.main.perfect = QtWidgets.QLabel(self.main.widget_2)
+        self.main.perfect.setStyleSheet('color:white; font-size:20px')
+        self.main.perfect.setGeometry(QtCore.QRect(0,0,210,125))
+        self.main.perfect.setText(_translate("MainWindow",
+        "<html><head/><body><p align=\"center\">완치자<br/> "+
+        "<span style='font-size:50px'>"
+        +str(data[2])+"</span><br/>"+
+        "<span style='font-size:15px'>"+str(data[3])+
+        "</span></p></body></html>"))
 
         # self.widget_3.setText(str(data[4])+" "+str(data[5]))
-        # self.care = QtWidgets.QLabel(self.widget_3)
-        # self.care.setStyleSheet('color:white; font-size:20px')
-        # self.care.setGeometry(QtCore.QRect(0,0,210,125))
-        # self.care.setText(_translate("MainWindow",
-        # "<html><head/><body><p align=\"center\">치료중<br/> "+
-        # "<span style='font-size:50px'>"
-        # +str(data[4])+"</span><br/>"+
-        # "<span style='font-size:15px'>"+str(data[5])+
-        # "</span></p></body></html>"))
-        # # self.widget_4.setText(str(data[6])+" "+str(data[7]))
-        # self.dead = QtWidgets.QLabel(self.widget_4)
-        # self.dead.setStyleSheet('color:white; font-size:20px')
-        # self.dead.setGeometry(QtCore.QRect(0,0,210,125))
-        # self.dead.setText(_translate("MainWindow",
-        # "<html><head/><body><p align=\"center\">사망<br/> "+
-        # "<span style='font-size:50px'>"
-        # +str(data[6])+"</span><br/>"+
-        # "<span style='font-size:15px'>"+str(data[7])+
-        # "</span></p></body></html>"))
+        self.main.care = QtWidgets.QLabel(self.main.widget_3)
+        self.main.care.setStyleSheet('color:white; font-size:20px')
+        self.main.care.setGeometry(QtCore.QRect(0,0,210,125))
+        self.main.care.setText(_translate("MainWindow",
+        "<html><head/><body><p align=\"center\">치료중<br/> "+
+        "<span style='font-size:50px'>"
+        +str(data[4])+"</span><br/>"+
+        "<span style='font-size:15px'>"+str(data[5])+
+        "</span></p></body></html>"))
+        # self.widget_4.setText(str(data[6])+" "+str(data[7]))
+        self.main.dead = QtWidgets.QLabel(self.main.widget_4)
+        self.main.dead.setStyleSheet('color:white; font-size:20px')
+        self.main.dead.setGeometry(QtCore.QRect(0,0,210,125))
+        self.main.dead.setText(_translate("MainWindow",
+        "<html><head/><body><p align=\"center\">사망<br/> "+
+        "<span style='font-size:50px'>"
+        +str(data[6])+"</span><br/>"+
+        "<span style='font-size:15px'>"+str(data[7])+
+        "</span></p></body></html>"))
