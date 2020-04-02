@@ -12,7 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import random
 from lib.ScriptRunner import Runner
-from lib.DataCollector import DataCollector
+from lib.DataCollector00 import DataCollector
 from lib.item import Item
 import requests
 import json
@@ -38,7 +38,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.browser.get(self.url)
         self.user_uuid = uuid.uuid4()
         self.runner = Runner(self)
-        self.dc = DataCollector()
+        self.dc = DataCollector(self)
         # self.comboBox.addItem("키워드")
         # self.comboBox.addItem("주소")
         self.itemList = []
@@ -66,6 +66,36 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.listWidget.itemActivated.connect(self.activateRow)
         # self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
         self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
+
+
+        #https://www.riverbankcomputing.com/static/Docs/PyQt5/api/qtcore/qtcore-module.html
+        ##체크박스
+        #체크 1 : empty 이하(1개 이하)
+        #체크 2 : few 이하(30개 미만)
+        #체크 3 : some 이하(100개 미만)
+        self.dataChecker = 0
+        self.radio1.clicked.connect(lambda : self.setDataChecker(0))
+        self.radio2.clicked.connect(lambda : self.setDataChecker(2))
+        self.radio3.clicked.connect(lambda : self.setDataChecker(3))
+        self.radio4.clicked.connect(lambda : self.setDataChecker(4))
+
+
+
+
+
+
+
+
+    def setDataChecker(self, num) :
+        print("setDataChecker ,",num)
+        self.dataChecker = num
+
+
+
+
+
+
+
 
 
     def mark_around(self) :
