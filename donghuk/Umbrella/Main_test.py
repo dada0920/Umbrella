@@ -16,6 +16,8 @@ from lib.DataCollector import DataCollector
 from lib.item import Item
 import requests
 import json
+
+import uuid
 class Umbrella(QMainWindow, Ui_MainWindow) :
     #생성자
     def __init__(self) :
@@ -34,7 +36,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         chrome_option.add_argument("--mute-audio")
         self.browser = webdriver.Chrome(chrome_options=chrome_option, executable_path="resources/chromedriver.exe")
         self.browser.get(self.url)
-
+        self.user_uuid = uuid.uuid4()
         self.runner = Runner(self)
         self.dc = DataCollector()
         # self.comboBox.addItem("키워드")
@@ -77,7 +79,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.runner.marking(data)
         self.show_list(data)
         self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
-
+        print("uuid---------------------------------",self.user_uuid)
 
     def init_my_location(self) :
         url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQKxbTt0MrFNH85kTJXzickMD5s88UVaI'
