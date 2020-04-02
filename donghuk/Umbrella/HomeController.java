@@ -38,9 +38,9 @@ public class HomeController {
 	}
 	
 	@PostMapping("/umbrella/save_center")
-	public void umbrella_save_center(String center_lat, String center_lng) {
-		
-		File file = new File("center.txt");
+	public void umbrella_save_center(String center_lat, String center_lng, String user_uuid) {
+		System.out.println(""+user_uuid);
+		File file = new File("d:\\data\\"+user_uuid+"center.txt");
 		FileWriter writer = null;
 		
 		try {
@@ -65,9 +65,10 @@ public class HomeController {
 	
 	@PostMapping("/umbrella/get_center")
 	@ResponseBody
-	public String umbrella_get_center() {
+	public String umbrella_get_center(String user_uuid) {
 		String latlng = "";
-		File file = new File("center.txt");
+		System.out.println(""+user_uuid);
+		File file = new File("d:\\data\\"+user_uuid+"center.txt");
 		try(FileReader filereader = new FileReader(file);
 			BufferedReader br = new BufferedReader(filereader)
 			) {
@@ -86,9 +87,9 @@ public class HomeController {
 
 	
 	@PostMapping("/umbrella/save_level")
-	public void umbrella_save_level(String level) {
+	public void umbrella_save_level(String level, String user_uuid) {
 		
-		File file = new File("level.txt");
+		File file = new File("d:\\data\\"+user_uuid+"level.txt");
 		FileWriter writer = null;
 		
 		try {
@@ -113,9 +114,9 @@ public class HomeController {
 	
 	@PostMapping("/umbrella/get_level")
 	@ResponseBody
-	public String umbrella_get_level() {
+	public String umbrella_get_level(String user_uuid) {
 		String level = "";
-		File file = new File("level.txt");
+		File file = new File("d:\\data\\"+user_uuid+"level.txt");
 		try(FileReader filereader = new FileReader(file);
 			BufferedReader br = new BufferedReader(filereader)
 			) {
