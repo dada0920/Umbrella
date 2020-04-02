@@ -106,15 +106,18 @@ class Ui_MainWindow(object):
         self.pushButton3 = QtWidgets.QPushButton(self.frame)
         self.pushButton3.setGeometry(QtCore.QRect(481, 601, 101, 31))
         self.pushButton3.setObjectName("pushButton3")
-        self.checkBox = QtWidgets.QCheckBox(self.frame)
-        self.checkBox.setGeometry(QtCore.QRect(590, 600, 101, 31))
-        self.checkBox.setObjectName("checkBox")
-        self.checkBox_2 = QtWidgets.QCheckBox(self.frame)
-        self.checkBox_2.setGeometry(QtCore.QRect(700, 600, 111, 31))
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.checkBox_3 = QtWidgets.QCheckBox(self.frame)
-        self.checkBox_3.setGeometry(QtCore.QRect(810, 600, 111, 31))
-        self.checkBox_3.setObjectName("checkBox_3")
+        #1개 미만
+        self.radioButton = QtWidgets.QRadioButton(self.frame)
+        self.radioButton.setGeometry(QtCore.QRect(590, 600, 101, 31))
+        self.radioButton.setObjectName("radioButton")
+        #30개 미만
+        self.radioButton2 = QtWidgets.QRadioButton(self.frame)
+        self.radioButton2.setGeometry(QtCore.QRect(700, 600, 111, 31))
+        self.radioButton2.setObjectName("radioButton2")
+        #100개 미만
+        self.radioButton3 = QtWidgets.QRadioButton(self.frame)
+        self.radioButton3.setGeometry(QtCore.QRect(810, 600, 111, 31))
+        self.radioButton3.setObjectName("radioButton3")
         self.listWidget = QtWidgets.QListWidget(self.page_2)
         self.listWidget.setGeometry(QtCore.QRect(0, 630, 921, 171))
         self.listWidget.setObjectName("listWidget")
@@ -138,9 +141,9 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "검색"))
         self.pushButton2.setText(_translate("MainWindow", "판매처 탐색"))
         self.pushButton3.setText(_translate("MainWindow", "내 위치"))
-        self.checkBox.setText(_translate("MainWindow", "CheckBox"))
-        self.checkBox_2.setText(_translate("MainWindow", "CheckBox"))
-        self.checkBox_3.setText(_translate("MainWindow", "CheckBox"))
+        self.radioButton.setText(_translate("MainWindow", "CheckBox"))
+        self.radioButton2.setText(_translate("MainWindow", "CheckBox"))
+        self.radioButton3.setText(_translate("MainWindow", "CheckBox"))
 from PyQt5 import QtWebEngineWidgets
 
 
