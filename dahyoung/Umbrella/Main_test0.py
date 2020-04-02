@@ -5,7 +5,6 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl
 # from ui.main_ui import Ui_MainWindow
 from ui.main_test0 import Ui_MainWindow
-from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
 import os
 from selenium import webdriver
@@ -14,13 +13,15 @@ import random
 from lib.ScriptRunner import Runner
 from lib.DataCollector0 import DataCollector
 from lib.item import Item
-from lib.item0 import Intro_Item
+# from lib.item0 import Intro_Item
 import requests
 import json
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
+from matplotlib import font_manager, rc
 from PyQt5 import *
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class Umbrella(QMainWindow, Ui_MainWindow) :
     #생성자
@@ -42,7 +43,7 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.browser.get(self.url)
 
         self.runner = Runner(self)
-        self.dc = DataCollector()
+        self.dc = DataCollector(self)
         # self.comboBox.addItem("키워드")
         # self.comboBox.addItem("주소")
         self.itemList = []
@@ -50,7 +51,8 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         # self.page.featurePermissionRequested.connect(self.setPagePermission)
 
         #page 변환
-        self.pushButton_3.clicked.connect(self.translate_ui)
+        self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.pushButton__image.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
         self.pushButton.clicked.connect(self.runner.map_removeMarkers)
         #intro 데이터 입력
         self
@@ -74,9 +76,6 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.listWidget.itemActivated.connect(self.activateRow)
         # self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
         self.lineEdit.setText(self.runner.coord_to_address(self.my_location_lat,self.my_location_lng, 0))
-    def translate_ui(self) :
-        self.stackedWidget.setCurrentIndex(1)
-
 
     def mark_around(self) :
         self.remove_list()
@@ -90,14 +89,15 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         self.show_list(data)
         self.lineEdit.setText(self.runner.coord_to_address(lat, lng, 0))
 
+    # def checkBox_mark_around(self):
+
     #표지
     def intro(self):
-        # self.remove_list()
-        print("aa")
         data=self.dc.A()
 
         self.show_intro_list(data)
-        print("intro")
+    #그래프
+        self.dc.intro_graph()
 
     def init_my_location(self) :
         url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQKxbTt0MrFNH85kTJXzickMD5s88UVaI'
@@ -134,13 +134,8 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
 
     #intro show_list
     def show_intro_list(self,data):
-        # QWidget.__init__(self, flags=Qt.Widget)
-        # self.layout = QBoxLayout(QBoxLayout.LeftToRight)
-        # self.layout.setContentsMargins(QMargins())
-        # self.patient.setObjectName("patient")
         _translate = QtCore.QCoreApplication.translate
 
-        
         self.patient = QtWidgets.QLabel(self.widget_1)
         self.patient.setStyleSheet('color:white; font-size:20px')
         self.patient.setGeometry(QtCore.QRect(0,0,210,125))
@@ -182,13 +177,6 @@ class Umbrella(QMainWindow, Ui_MainWindow) :
         +str(data[6])+"</span><br/>"+
         "<span style='font-size:15px'>"+str(data[7])+
         "</span></p></body></html>"))
-        # intro_item = QListWidgetItem(self.listWidget1)
-        # row = Intro_Item(data)
-        # intro_item.setSizeHint(row.sizeHint())
-        # self.listWidget1.setItemWidget(intro_item, row)
-        # self.listWidget1.addItem(intro_item)
-        # self.itemList.append(intro_item)
-        # self.rowList.append(row)
 
     def remove_list(self) :
         for i in range(len(self.itemList)) :
@@ -205,6 +193,7 @@ if __name__ == "__main__" :
     app = QApplication(sys.argv)
     window = Umbrella()
     window.intro()
+
     window.show()
 
     app.exec_()

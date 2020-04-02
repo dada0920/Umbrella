@@ -7,6 +7,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from bs4 import BeautifulSoup
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5 import *
+import matplotlib.pyplot as plt
 #마커 찍으면서, 약국이름, 주소, 갱신시간, 입고시간, remain_stat
 #type 1 : 약국, 2 : 우체국, 3 : 농협
 
@@ -18,21 +23,8 @@ from bs4 import BeautifulSoup
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = "utf-8")
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = "utf-8")
 class DataCollector :
-    def __init__(self):
-            list_data=[]
-            url = "http://ncov.mohw.go.kr/"
-
-            res = req.urlopen(url).read()
-
-            soup = BeautifulSoup(res, "html.parser")
-            a = self.numI(soup.select_one("div.liveNumOuter > div > ul > li:nth-child(1) > span.num ").text)
-            b = soup.select_one("div.liveNumOuter > div > ul > li:nth-child(1) > span.before").text
-            c = self.numI(soup.select_one("div.liveNumOuter > div > ul > li:nth-child(2) > span.num").text)
-            d = soup.select_one("div.liveNumOuter > div > ul > li:nth-child(2) > span.before").text
-            e = self.numI(soup.select_one("div.liveNumOuter > div > ul > li:nth-child(3) > span.num").text)
-            f = soup.select_one("div.liveNumOuter > div > ul > li:nth-child(3) > span.before").text
-            g = self.numI(soup.select_one("div.liveNumOuter > div > ul > li:nth-child(4) > span.num").text)
-            h = soup.select_one("div.liveNumOuter > div > ul > li:nth-child(4) > span.before").text
+    def __init__(self,parent):
+            self.main=parent
 
 
 
@@ -46,10 +38,6 @@ class DataCollector :
 
 
         return result
-
-
-
-
 
 
     # 숫자만 가져오는것
@@ -85,16 +73,21 @@ class DataCollector :
         # print("사망자 : ",g,h)
 
     def intro_graph(self):
-        # matplotlib 한글 폰트 설정
+        # data=[]
+        data=self.A()
+        a=data[0]
+        c=data[2]
+        e=data[4]
+        g=data[6]
+
         font_name = font_manager.FontProperties(fname="c:/Windows/fonts/YTTE08.TTF").get_name()
         rc('font', family=font_name)
-
         labels = ('확진환자', '완치자', '치료중', '사망자') ## 라벨
-
-        xs = [self.a,self.c,self.e,self.g] ## 값들, pie 차트에서 알아서 100% 기준으로 변경해서 정리해줌
+        xs = [a,c,e,g] ## 값들, pie 차트에서 알아서 100% 기준으로 변경해서 정리해줌
 
         ## 그림
-        plt.figure(figsize=(6, 6))
+        fig=plt.figure(figsize=(60, 6))
+
         ## plt.pie로 생기는 요소를 다음처럼 리턴하여 값을 저장
         patches, texts, autotexts = plt.pie(
             labels=labels, ## label
@@ -108,31 +101,24 @@ class DataCollector :
         )
         ## add circle
         ## 도넛처럼 만들기 위해서 아래처럼
-        centre_circle = plt.Circle((0,0),0.50,color='white')
+        centre_circle = plt.Circle((0,0),0.40,color='white')
         plt.gca().add_artist(centre_circle)
         #######
         ## label만 변경해주기
         for t in texts:
             t.set_color("black")
-            t.set_fontsize(20)
+            t.set_fontsize(15)
         ## pie 위의 텍스트를 다른 색으로 변경해주기
         for t in autotexts:
             t.set_color("white")
-            t.set_fontsize(20)
+            t.set_fontsize(10)
         plt.tight_layout()
         plt.savefig("D:/umbrella/200330_pie_chart.svg")
-        plt.show()
+        #위젯그래프에 그래프 표시하기
+        canvas=FigureCanvas(fig)
+        canvas.draw()
+        lay=QHBoxLayout(self.main.widget_graph)
 
-
-
-
-if __name__ == "__main__" :
-    # url = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=37.625782432083724&lng=127.07302589022808&m=500"
-    # data1 = json.loads(urllib.request.urlopen(url).read()).get("stores")
-
-    # print(data1)
-    # print(f"\n\n\n\n {type(data1[0])}")
-    dc = DataCollector()
-    # # print(dc.get_data_by_latlng(37.6257824320837,127.07302589022,500))
-    # print(dc.A())
-    dc.intro_graph()
+        self.main.setLayout(lay)
+        lay.addWidget(canvas)
+        canvas.show()
